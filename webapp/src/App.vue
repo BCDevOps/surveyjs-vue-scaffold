@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <img src="./assets/logo.png" />
     <!-- If you want to hide survey, comment the lines below -->
     <h2>Survey Library:</h2>
     <survey :survey="survey"></survey>
@@ -47,8 +47,8 @@ SurveyKo.Serializer.addProperty("question", "tag:number");
 export default {
   name: "app",
   components: {
-    Survey,
-    SurveyCreator
+    Survey
+    //SurveyCreator
   },
   data() {
     var json = {
@@ -181,9 +181,9 @@ export default {
     };
     var model = new SurveyVue.Model(json);
     var savePDF = function() {
-        var surveyPDF = new SurveyPDF.SurveyPDF(json);
-        surveyPDF.data = model.data;
-        surveyPDF.save();
+      var surveyPDF = new SurveyPDF.SurveyPDF(json);
+      surveyPDF.data = model.data;
+      surveyPDF.save();
     };
     return {
       survey: model,
