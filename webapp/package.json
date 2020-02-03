@@ -21,6 +21,7 @@
     "surveyjs-widgets": "^1.0.79",
     "vue": "^2.2.2"
   },
+  "@bcgov/bootstrap-theme": "https://github.com/andrewwhitehead/bootstrap-theme/releases/download/1.1.1/bcgov-bootstrap-theme-1.1.1.tgz",
   "devDependencies": {
     "autoprefixer": "^6.7.2",
     "babel-core": "^6.26.3",
