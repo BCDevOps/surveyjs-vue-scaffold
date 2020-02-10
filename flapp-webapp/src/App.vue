@@ -1,23 +1,24 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-    <Survey msg="The survey goes here" />
-    <SurveyCreator msg="The survey creator goes here" />
+    <!--HelloWorld msg="Welcome to Your Vue.js App" /-->
+    <SurveyComponent />
+    <hr />
+    <h2>Survey Creator Component</h2>
+    <!-- SurveyCreator msg="The survey creator goes here" /-->
+    <hr />
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-import Survey from "./components/Survey.vue";
-import SurveyCreator from "./components/SurveyCreator.vue";
+import SurveyComponent from "./components/SurveyComponent.vue";
 
 export default {
   name: "app",
   components: {
-    HelloWorld,
-    Survey,
-    SurveyCreator
+    //HelloWorld,
+    //Survey,
+    SurveyComponent
+    //SurveyCreator
   }
 };
 </script>
