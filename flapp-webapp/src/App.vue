@@ -1,24 +1,19 @@
 <template>
   <div id="app">
-    <!--HelloWorld msg="Welcome to Your Vue.js App" /-->
     <SurveyComponent />
-    <hr />
-    <h2>Survey Creator Component</h2>
-    <!-- SurveyCreator msg="The survey creator goes here" /-->
-    <hr />
+    <SurveyCreatorComponent />
   </div>
 </template>
 
 <script>
 import SurveyComponent from "./components/SurveyComponent.vue";
+import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
 
 export default {
   name: "app",
   components: {
-    //HelloWorld,
-    //Survey,
-    SurveyComponent
-    //SurveyCreator
+    SurveyComponent,
+    SurveyCreatorComponent
   }
 };
 </script>
