@@ -15,7 +15,7 @@ import * as SurveyVue from "survey-vue";
 /* import Vue from "vue";
 import Survey from "survey-vue";*/
 
-SurveyVue.StylesManager.applyTheme("bootstrap");
+SurveyVue.StylesManager.applyTheme("@bcgov/bootstrap-theme");
 
 var surveyJSON = {
   title: "Tell us, what technologies do you use?",
@@ -95,7 +95,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
-  margin: 40px 0 0;
+  margin: 60px 60px 60px;
 }
 ul {
   list-style-type: none;
@@ -103,9 +103,9 @@ ul {
 }
 li {
   display: inline-block;
-  margin: 0 10px;
+  margin: 100px 100px;
 }
 a {
-  color: #42b983;
+  color: #100000;
 }
 </style>

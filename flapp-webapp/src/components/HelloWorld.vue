@@ -1,9 +1,24 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br />
-      check out the
+    <h1>Hello world 1</h1>
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      With Bootstrap!
+      <button
+        type="button"
+        class="close"
+        data-dismiss="alert"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <p>The text is: {{ message }}</p>
+    <p>{{ message2 }}</p>
+
+    <!-- <p>
+      For a guide and recipes on how to configure / customize this project,
+      <br />check out the
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener"
         >vue-cli documentation</a
       >.
@@ -82,15 +97,18 @@
           >awesome-vue</a
         >
       </li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 
 <script>
 export default {
   name: "HelloWorld",
-  props: {
-    msg: String
+  data: function() {
+    return {
+      message: "This is working now?",
+      message2: "this is the second message"
+    };
   }
 };
 </script>
@@ -109,6 +127,6 @@ li {
   margin: 0 10px;
 }
 a {
-  color: #42b983;
+  color: #5c42b9;
 }
 </style>
