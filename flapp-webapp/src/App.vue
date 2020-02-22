@@ -2,9 +2,11 @@
   <div id="app">
     <Navbar />
     <!-- <HelloWorld /> -->
-    <Cards />
-    <SurveyComponent />
-    <SurveyCreatorComponent />
+    <!--<Cards />
+    <ApplicantInfo />
+    <ApplicantExperience />
+    <SurveyCreatorComponent /> -->
+    <HeavySurvey />
     <Footer />
   </div>
 </template>
@@ -12,10 +14,15 @@
 <script>
 import Navbar from "./components/Navbar.vue";
 import HelloWorld from "./components/HelloWorld.vue";
-import SurveyComponent from "./components/SurveyComponent.vue";
-import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
+import ApplicantInfo from "./components/ApplicantInfo.vue";
+import ApplicantExperience from "./components/ApplicantExperience.vue";
+import RespondentInfo from "./components/RespondentInfo.vue";
+
+import RespondentRemedy from "./components/RespondentRemedy.vue";
+//import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
 import Footer from "./components/Footer.vue";
 import Cards from "./components/Cards.vue";
+import HeavySurvey from "./components/HeavySurvey.vue";
 
 export default {
   name: "app",
@@ -23,9 +30,13 @@ export default {
     Navbar,
     Footer,
     //HelloWorld,
-    SurveyComponent,
-    SurveyCreatorComponent
+    //ApplicantInfo,
+    //ApplicantExperience
+    //RespondentInfo,
+    //RespondentRemedy
+    //SurveyCreatorComponent
     //Cards
+    HeavySurvey
   }
 };
 </script>
@@ -36,7 +47,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: $primary;
+  color: $text-color;
   margin-top: 60px;
 }
 </style>
