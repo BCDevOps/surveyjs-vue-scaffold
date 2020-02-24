@@ -4,7 +4,10 @@ import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import "@bcgov/bootstrap-theme/dist/css/bootstrap-theme.min.css";
-//import "./_common.scss";
+
+// https://www.npmjs.com/package/vue-fontawesome-icon
+// import material-icon scss
+import "font-awesome/css/font-awesome.min.css";
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);

@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="app-header">
     <nav class="navbar navbar-expand-lg navbar-dark">
       <!-- Navbar content -->
 
@@ -65,6 +65,7 @@
     </nav>
   </header>
 </template>
+
 <script>
 export default {
   data() {
@@ -78,7 +79,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .app-outer {
   display: flex;
   flex-flow: column nowrap;
@@ -123,5 +124,44 @@ export default {
   display: inline-block;
   flex: 1 1 auto;
   text-align: right;
+}
+.navbar .navbar-extra {
+  display: inline-block;
+  flex: 1 1 auto;
+  text-align: right;
+}
+
+.app-exit,
+.navbar {
+  .btn-primary {
+    border-color: #ccc;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .navbar .navbar-text {
+    font-size: 1em;
+  }
+  .navbar .navbar-extra {
+    flex: 0 1 auto;
+  }
+}
+
+#app-exit {
+  padding: 8px 15px;
+  position: absolute;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 100;
+  .btn {
+    border-radius: 10rem;
+    font-size: 110%;
+    padding: 0.5em 1em;
+  }
+}
+
+#app-profile {
+  color: $gov-white;
 }
 </style>

@@ -13,6 +13,9 @@
             >
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="/terms" target="_blank">Terms of Use</a>
+          </li>
+          <li class="nav-item">
             <a
               class="nav-link"
               href="https://www2.gov.bc.ca/gov/content/home/privacy"
@@ -52,12 +55,7 @@
 <script>
 export default {
   data() {
-    return {
-      meal: ""
-    };
-  },
-  methods: {
-    getMeal() {}
+    return {};
   }
 };
 </script>
