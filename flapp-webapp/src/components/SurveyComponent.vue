@@ -12,17 +12,7 @@ import * as SurveyVue from "survey-vue";
 
 import surveyPrimaryJSON from "../assets/survey-primary.json";
 
-//import surveyPrimaryJSON from "../assets/heavy.json";
-
-//let Survey = SurveyVue.Survey;
-//import Survey from "survey-vue";
-
-/* import Vue from "vue";
-import Survey from "survey-vue";*/
-
 SurveyVue.StylesManager.applyTheme("bootstrap");
-
-//var survey = new Survey(surveyJSON);
 
 /* survey.onComplete.add(function(result) {
   document.querySelector("#surveyResult").textContent =
