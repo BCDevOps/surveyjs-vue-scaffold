@@ -6,7 +6,9 @@ This is the skeleton project for the Family Protection App.
 
 It is currently built with Vue.js, SurveyJS, Typescript and the BcGov Bootstrap theme.
 
-To recreate:
+Links to documentation:
+Vuex
+https://vuex.vuejs.org/installation.html
 
-- install vue
--
+Vue-router
+https://router.vuejs.org/

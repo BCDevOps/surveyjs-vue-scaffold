@@ -1,7 +1,7 @@
 <template>
   <div class="app-outer fill-body" id="app">
     <Navbar />
-    <main class="app-content">
+    <main class="app-content fill-body">
       <SurveySidebarComponent />
       <SurveyComponent />
       <!--SurveyCreatorComponent /-->

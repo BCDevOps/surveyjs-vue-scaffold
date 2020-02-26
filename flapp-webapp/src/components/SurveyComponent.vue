@@ -1,6 +1,9 @@
 <template>
-  <div id="SurveyComponent">
-    <b-container fluid>
+  <div
+    class="fill-height-lg survey-container contentcontainer codecontainer"
+    id="SurveyComponent"
+  >
+    <b-container class="fill-body">
       <survey :survey="survey"></survey>
       <!--div id="surveyResult"></div-->
     </b-container>
@@ -12,7 +15,7 @@ import * as SurveyVue from "survey-vue";
 
 import surveyPrimaryJSON from "../assets/survey-primary.json";
 
-SurveyVue.StylesManager.applyTheme("bootstrap");
+SurveyVue.StylesManager.applyTheme("bcgov");
 
 /* survey.onComplete.add(function(result) {
   document.querySelector("#surveyResult").textContent =
@@ -93,5 +96,8 @@ a.util-nav {
 }
 .survey-nav-left {
   margin-right: 1em;
+}
+.btn-primary {
+  border-color: #ccc;
 }
 </style>
