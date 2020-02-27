@@ -3,7 +3,7 @@
     <Navbar />
     <main class="app-content fill-body">
       <SurveySidebarComponent />
-      <SurveyComponent />
+      <SelectedForms>{{ msg }}</SelectedForms>
       <!--SurveyCreatorComponent /-->
     </main>
     <Footer />
@@ -13,9 +13,10 @@
 <script>
 import Navbar from "./components/Navbar.vue";
 import SurveySidebarComponent from "./components/SurveySidebarComponent.vue";
-import SurveyComponent from "./components/SurveyComponent.vue";
-import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
+import SelectedForms from "./components/SelectedForms.vue";
+//import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
 import Footer from "./components/Footer.vue";
+import ApplicantExperience from "./components/ApplicantExperience.vue";
 
 export default {
   name: "app",
@@ -23,7 +24,9 @@ export default {
     Navbar,
     Footer,
     SurveySidebarComponent,
-    SurveyComponent
+    SelectedForms
+    //ApplicantExperience
+
     //SurveyCreatorComponent
   }
 };

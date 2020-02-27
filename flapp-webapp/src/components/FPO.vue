@@ -1,8 +1,9 @@
 <template>
   <div
     class="fill-height-lg survey-container contentcontainer codecontainer"
-    id="SurveyComponent"
+    id="fpocomponent"
   >
+    <h2>FPO form</h2>
     <b-container class="fill-body">
       <survey :survey="survey"></survey>
       <!--div id="surveyResult"></div-->
@@ -12,7 +13,6 @@
 
 <script>
 import * as SurveyVue from "survey-vue";
-
 import surveyPrimaryJSON from "../assets/survey-primary.json";
 
 SurveyVue.StylesManager.applyTheme("bcgov");
@@ -23,12 +23,10 @@ SurveyVue.StylesManager.applyTheme("bcgov");
 }); */
 
 export default {
-  name: "SurveyComponent",
+  name: "FPO",
   data() {
     var survey = new SurveyVue.Model(surveyPrimaryJSON);
-
     //console.log("surveyPrimaryJSON = " + JSON.stringify(surveyPrimaryJSON, null, 3));
-
     return { survey: survey };
   }
 };
