@@ -1,9 +1,11 @@
 <template>
   <div id="surveyCreatorComponent">
-    <hr />
-    <h2>Survey Creator Component</h2>
-    <div id="surveyCreatorContainer" />
-    <!--div id="surveyResult"></div-->
+    <b-container>
+      <hr />
+      <h2>Survey Creator Component</h2>
+      <div id="surveyCreatorContainer" />
+      <!--div id="surveyResult"></div-->
+    </b-container>
   </div>
 </template>
 

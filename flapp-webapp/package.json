@@ -4,18 +4,29 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "npm run lint -- --fix && vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@bcgov/bootstrap-theme": "https://github.com/bcgov/bootstrap-theme/releases/download/v1.1.3/bcgov-bootstrap-theme-1.1.3.tgz",
     "ace-builds": "^1.4.8",
-    "bootstrap": "^3.4.1",
-    "core-js": "^3.4.4",
+    "bootstrap": "^4.4.1",
+    "bootstrap-vue": "^2.5.0",
+    "core-js": "^3.6.4",
     "jquery": "^3.4.1",
+    "node-sass": "^4.13.1",
+    "popper.js": "^1.16.1",
+    "sass-loader": "^8.0.2",
     "survey-creator": "^1.5.5",
     "survey-vue": "^1.5.5",
     "surveyjs-widgets": "^1.5.5",
-    "vue": "^2.6.10"
+    "typescript": "^3.7.5",
+    "vue": "^2.6.10",
+    "vue-fontawesome": "0.0.2",
+    "vue-fontawesome-icon": "^1.3.0",
+    "vue-router": "^3.1.5",
+    "vuex": "^3.1.2",
+    "yorkie": "^2.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",
@@ -47,7 +58,6 @@
     "> 1%",
     "last 2 versions"
   ],
-  "@bcgov/bootstrap-theme": "https://github.com/andrewwhitehead/bootstrap-theme/releases/download/1.1.1/bcgov-bootstrap-theme-1.1.1.tgz",
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
