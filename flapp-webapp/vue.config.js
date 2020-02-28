@@ -14,7 +14,8 @@ module.exports = {
       sass: {
         prependData: `@import "@/styles/_variables.scss";`,
         prependData: `@import "@/styles/_common.scss";`,
-        prependData: `@import "@/styles/_survey.scss";`
+        prependData: `@import "@/styles/_survey.scss";`,
+        prependData: `@import "@/styles/styles.scss";`
       }
     }
   }
