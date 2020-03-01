@@ -2,11 +2,14 @@
   <div class="app-outer fill-body" id="app">
     <Navbar />
     <main class="app-content fill-body">
-      <SurveySidebarComponent />
-      <SelectedForms>{{ msg }}</SelectedForms>
+      <SurveySidebarComponent
+        v-bind:selectedForm="selectedForm"
+        @updated-selection="onSidebarClicked"
+      />
+      <SelectedForms v-bind:form="selectedForm" />
       <!--SurveyCreatorComponent /-->
     </main>
-    <Footer />
+    <Footer id="footer" />
   </div>
 </template>
 
@@ -16,7 +19,6 @@ import SurveySidebarComponent from "./components/SurveySidebarComponent.vue";
 import SelectedForms from "./components/SelectedForms.vue";
 //import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
 import Footer from "./components/Footer.vue";
-import ApplicantExperience from "./components/ApplicantExperience.vue";
 
 export default {
   name: "app",
@@ -28,6 +30,30 @@ export default {
     //ApplicantExperience
 
     //SurveyCreatorComponent
+  },
+  methods: {
+    onSidebarClicked(value) {
+      console.log("Was '" + this.form + "'");
+      this.form = value;
+      console.log("Is now '" + this.form + "'");
+
+      return value;
+    }
+  },
+  computed: {
+    form: {
+      get: function() {
+        return this.selectedForm;
+      },
+      set: function(newValue) {
+        this.selectedForm = newValue;
+      }
+    }
+  },
+  data() {
+    return {
+      selectedForm: "fpo"
+    };
   }
 };
 </script>
@@ -50,7 +76,7 @@ export default {
   flex-flow: row nowrap;
   max-width: 100%;
   padding-top: 0;
-  padding-bottom: 0;
+  padding-bottom: 3.5rem;
 }
 
 .app-main {
@@ -132,5 +158,15 @@ export default {
     font-size: 110%;
     padding: 0.5em 1em;
   }
+}
+
+// https://www.freecodecamp.org/news/how-to-keep-your-footer-where-it-belongs-59c6aa05c59c/
+
+#footer {
+  position: absolute;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 3.5rem; /* Footer height */
 }
 </style>

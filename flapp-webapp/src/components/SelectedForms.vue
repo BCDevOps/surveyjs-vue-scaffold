@@ -2,12 +2,11 @@
   <div class="fill-height-lg" id="Selected forms">
     <b-container class="fill-body">
       <!--div id="surveyResult"></div-->
-      <FPO />
-      <FLM />
-      <ChildRelocation />
-      <Parenting />
-      <CaseMgmt />
-      <Enforcement />
+      <FPO v-if="form === 'fpo'" /> <FLM v-else-if="form === 'flm'" />
+      <ChildRelocation v-else-if="form === 'child-relocation'" />
+      <Parenting v-else-if="form === 'parenting'" />
+      <CaseMgmt v-else-if="form === 'case-mgmt'" />
+      <Enforcement v-else-if="form === 'enforcement'" />
     </b-container>
   </div>
 </template>
@@ -40,6 +39,9 @@ export default {
     Parenting,
     CaseMgmt,
     Enforcement
+  },
+  props: {
+    form: String
   }
 };
 </script>

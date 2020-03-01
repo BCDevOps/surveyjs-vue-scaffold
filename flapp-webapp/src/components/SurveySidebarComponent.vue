@@ -5,26 +5,52 @@
       <div class="sidebar-container" id="SurveySidebarComponent">
         <div class="sidebar-title"><h3>Application Steps</h3></div>
         <ul class="links">
-          <li class="current" tabindex="0">
-            <div class="link-icon">1</div>
-            <div class="link-label">Your Information</div>
-          </li>
           <li tabindex="0">
-            <div class="link-icon">2</div>
-            <div class="link-label">Your (ex-)Partner's Information</div>
+            <div class="link-icon">1</div>
+            <div class="link-label">Initial Survey</div>
           </li>
-          <!--li tabindex="0">
+          <li
+            tabindex="0"
+            class="div-icon-label"
+            id="main1"
+            v-on:click="myFunction('main1')"
+          >
+            <div class="link-icon">2</div>
+            <div class="link-label">FPO Form</div>
+            <div id="sub1">
+              <ul class="links">
+                <li tabindex="1" class="current">
+                  <div class="link-label">Your Information</div>
+                </li>
+                <li tabindex="1">
+                  <div class="link-label">Your (ex-)Partner's Info</div>
+                </li>
+                <li tabindex="1">
+                  <div class="link-label">Your Children's Information</div>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li tabindex="0" id="main2" v-on:click="myFunction('main2')">
             <div class="link-icon">3</div>
-            <div class="link-label">Your Children's Information</div>
+            <div class="link-label">FLM</div>
           </li>
           <li tabindex="0">
             <div class="link-icon">4</div>
-            <div class="link-label">Your Safety Needs</div>
+            <div class="link-label">Child Relocation</div>
           </li>
           <li tabindex="0">
             <div class="link-icon">5</div>
-            <div class="link-label">Your Story</div>
-          </li-->
+            <div class="link-label">Parenting</div>
+          </li>
+          <li tabindex="0">
+            <div class="link-icon">6</div>
+            <div class="link-label">Case Management</div>
+          </li>
+          <li tabindex="0">
+            <div class="link-icon">7</div>
+            <div class="link-label">Enforcement</div>
+          </li>
         </ul>
       </div>
     </survey-sidebar>
@@ -38,6 +64,29 @@ export default {
   name: "SurveySidebarComponent",
   data() {
     return {};
+  },
+  methods: {
+    myFunction: function(x) {
+      var sub = document.getElementById("sub1");
+      var main1 = document.getElementById("main1");
+      var main2 = document.getElementById("main2");
+      var curr = document.getElementById(x);
+
+      if (main1 == curr) {
+        sub.style.display = "block";
+        sub.classList.add("current");
+        main2.classList.remove("current");
+        this.$emit("updated-selection", "fpo");
+      } else {
+        sub.style.display = "none";
+        main2.classList.add("current");
+        sub.classList.remove("current");
+        this.$emit("updated-selection", "flm");
+      }
+    }
+  },
+  props: {
+    selectedForm: String
   }
 };
 </script>
