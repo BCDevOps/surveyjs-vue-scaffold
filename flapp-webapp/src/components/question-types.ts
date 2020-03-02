@@ -1,7 +1,7 @@
-function fixCheckboxes(Survey) {
+function fixCheckboxes(Survey: any) {
   const widget = {
     name: "fixchecks",
-    isFit: function(question) {
+    isFit: function(question: any) {
       const t = question.getType();
       return (
         t === "radiogroup" ||
@@ -11,7 +11,7 @@ function fixCheckboxes(Survey) {
       );
     },
     isDefaultRender: true,
-    afterRender: function(question, el) {
+    afterRender: function(question: any, el: any) {
       // if(1) return;
       const elts = el.getElementsByTagName("input");
       for (let idx = 0; idx < elts.length; idx++) {
@@ -63,7 +63,7 @@ function fixCheckboxes(Survey) {
           const target = <HTMLInputElement>event.target;
           if (question.getType() === "matrix") {
             if (target.checked) {
-              question.generatedVisibleRows.forEach(function(row, index, rows) {
+              question.generatedVisibleRows.forEach(function(row: any, index: any, rows: any) {
                 if (row.fullName === target.name) {
                   row.value = target.value;
                 }
@@ -97,7 +97,7 @@ function fixCheckboxes(Survey) {
             inputElts[i].checked = values.indexOf(inputElts[i].value) >= 0;
           }
         } else {
-          question.generatedVisibleRows.forEach(function(row, index, rows) {
+          question.generatedVisibleRows.forEach(function(row: any, index: any, rows: any) {
             if (row.value) {
               const inputElts = el.getElementsByTagName("input");
               for (let i = 0; i < inputElts.length; i++) {
@@ -113,13 +113,13 @@ function fixCheckboxes(Survey) {
         }
       };
     },
-    willUnmount: function(question, el) {}
+    willUnmount: function(question: any, el: any) {}
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
-function initHelpText(Survey) {
+function initHelpText(Survey: any) {
   const widget = {
     name: "helptext",
     title: "Expanding FAQ",
@@ -127,10 +127,10 @@ function initHelpText(Survey) {
     widgetIsLoaded: function() {
       return true;
     },
-    isFit: function(question) {
+    isFit: function(question: any) {
       return question.getType() === "helptext";
     },
-    activatedByChanged: function(activatedBy) {
+    activatedByChanged: function(activatedBy: any) {
       Survey.JsonObject.metaData.addClass("helptext", [], null, "empty");
       Survey.JsonObject.metaData.addProperties("helptext", [
         {
@@ -139,7 +139,7 @@ function initHelpText(Survey) {
       ]);
     },
     htmlTemplate: "<div></div>",
-    afterRender: function(question, el) {
+    afterRender: function(question: any, el: any) {
       while (el.childNodes.length) el.removeChild(el.childNodes[0]);
 
       const outer = document.createElement("div");
@@ -209,13 +209,13 @@ function initHelpText(Survey) {
       };
       question.valueChangedCallback();
     },
-    willUnmount: function(question, el) {}
+    willUnmount: function(question: any, el: any) {}
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
-function initInfoText(Survey) {
+function initInfoText(Survey: any) {
   const widget = {
     name: "infotext",
     title: "Message Text",
@@ -223,10 +223,10 @@ function initInfoText(Survey) {
     widgetIsLoaded: function() {
       return true;
     },
-    isFit: function(question) {
+    isFit: function(question: any) {
       return question.getType() === "infotext";
     },
-    activatedByChanged: function(activatedBy) {
+    activatedByChanged: function(activatedBy: any) {
       Survey.JsonObject.metaData.addClass("infotext", [], null, "empty");
       Survey.JsonObject.metaData.addProperties("infotext", [
         {
@@ -240,7 +240,7 @@ function initInfoText(Survey) {
       ]);
     },
     htmlTemplate: "<div></div>",
-    afterRender: function(question, el) {
+    afterRender: function(question: any, el: any) {
       while (el.childNodes.length) el.removeChild(el.childNodes[0]);
 
       const outer = document.createElement("div");
@@ -271,7 +271,7 @@ function initInfoText(Survey) {
       header.appendChild(lbl);
       outer.appendChild(header);
 
-      let body = null;
+      let body: any = null;
       if (question.body) {
         body = document.createElement("div");
         body.className = "panel-body";
@@ -314,13 +314,13 @@ function initInfoText(Survey) {
       question.titleChangedCallback = updateContent;
       updateContent();
     },
-    willUnmount: function(question, el) {}
+    willUnmount: function(question: any, el: any) {}
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
-function initYesNo(Survey) {
+function initYesNo(Survey: any) {
   const widget = {
     name: "yesno",
     title: "Yes/No",
@@ -329,14 +329,14 @@ function initYesNo(Survey) {
     widgetIsLoaded: function() {
       return true;
     },
-    isFit: function(question) {
+    isFit: function(question: any) {
       return question.getType() === "yesno";
     },
-    activatedByChanged: function(activatedBy) {
+    activatedByChanged: function(activatedBy: any) {
       Survey.JsonObject.metaData.addClass("yesno", [], null, "empty");
     },
     htmlTemplate: "<div></div>",
-    makeButton: function(question, opt) {
+    makeButton: function(question: any, opt: any) {
       const chk = document.createElement("input");
       chk.type = "radio";
       chk.name = question.name + "_" + question.id;
@@ -366,7 +366,7 @@ function initYesNo(Survey) {
       opt.button = outer;
       return outer;
     },
-    afterRender: function(question, el) {
+    afterRender: function(question: any, el: any) {
       while (el.childNodes.length) el.removeChild(el.childNodes[0]);
 
       const choices = [
@@ -378,7 +378,8 @@ function initYesNo(Survey) {
         el.appendChild(opt.button);
       }
       question.valueChangedCallback = function() {
-        for (const opt of choices) {
+        let opt: any = [];
+        for (opt of choices) {
           if (opt.value === question.value) opt.input.checked = true;
         }
       };
@@ -387,14 +388,14 @@ function initYesNo(Survey) {
         setTimeout(question.valueChangedCallback, 50);
       }
     },
-    willUnmount: function(question, el) {}
+    willUnmount: function(question: any, el: any) {}
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
   console.log(Survey.CustomWidgetCollection);
 }
 
-function initAddressBlock(Survey) {
+function initAddressBlock(Survey: any) {
   const widget = {
     name: "address",
     title: "Postal Address",
@@ -402,10 +403,10 @@ function initAddressBlock(Survey) {
     widgetIsLoaded: function() {
       return true;
     },
-    isFit: function(question) {
+    isFit: function(question: any) {
       return question.getType() === "address";
     },
-    activatedByChanged: function(activatedBy) {
+    activatedByChanged: function(activatedBy: any) {
       Survey.JsonObject.metaData.addClass(
         "address",
         [
@@ -486,11 +487,11 @@ function initAddressBlock(Survey) {
         }
       ];
     },
-    prevAddrOptions: function(question) {
+    prevAddrOptions: function(question: any) {
       const skipName = question.name;
       const survey = question.survey;
       const addrs = [];
-      const seen = {};
+      const seen: any = {};
       let otherQVal;
       for (const page of survey.pages) {
         for (const otherQ of page.questions) {
@@ -524,7 +525,7 @@ function initAddressBlock(Survey) {
       addrs.sort((a, b) => a.label.localeCompare(b.label));
       return addrs;
     },
-    afterRender: function(question, el) {
+    afterRender: function(question: any, el: any) {
       while (el.childNodes.length) el.removeChild(el.childNodes[0]);
 
       const outer = document.createElement("div");
@@ -552,7 +553,8 @@ function initAddressBlock(Survey) {
         opt.text = "(Select Address)";
         opt.value = "";
         selAddr.appendChild(opt);
-        for (const selIdx of Object.keys(selOpts)) {
+        let selIdx: any;
+        for (selIdx of Object.keys(selOpts)) {
           const selVal = selOpts[selIdx];
           const addrOpt = document.createElement("option");
           addrOpt.text = selVal.label;
@@ -560,7 +562,8 @@ function initAddressBlock(Survey) {
           selAddr.appendChild(addrOpt);
         }
         selAddr.onchange = function() {
-          const selIdx = (<HTMLInputElement>this).value;
+          let selIdx: any;
+          selIdx = (<HTMLInputElement>this).value;
           if (selIdx.length) {
             const selAddrOpt = selOpts[selIdx].value;
             question.value = selAddrOpt;
@@ -668,7 +671,7 @@ function initAddressBlock(Survey) {
 
       el.appendChild(outer);
 
-      function updateValue(evt) {
+      function updateValue(evt: any) {
         const value = {
           street: addr1.value,
           // 'line2': addr2.value,
@@ -677,7 +680,8 @@ function initAddressBlock(Survey) {
           country: country.value,
           postcode: postCode.value
         };
-        for (const k in value) {
+        //let k: any ={};
+        for (let k in value) {
           if (value[k] !== undefined && value[k].length) {
             question.value = value;
             return;
@@ -706,13 +710,13 @@ function initAddressBlock(Survey) {
         setTimeout(question.valueChangedCallback, 50);
       }
     },
-    willUnmount: function(question, el) {}
+    willUnmount: function(question: any, el: any) {}
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
-function initNameBlock(Survey) {
+function initNameBlock(Survey: any) {
   const widget = {
     name: "personname",
     title: "Person Name",
@@ -720,10 +724,10 @@ function initNameBlock(Survey) {
     widgetIsLoaded: function() {
       return true;
     },
-    isFit: function(question) {
+    isFit: function(question: any) {
       return question.getType() === "personname";
     },
-    activatedByChanged: function(activatedBy) {
+    activatedByChanged: function(activatedBy: any) {
       Survey.JsonObject.metaData.addClass(
         "personname",
         [
@@ -753,7 +757,7 @@ function initNameBlock(Survey) {
         "empty"
       );
     },
-    getDisplayValue: function(question) {
+    getDisplayValue: function(question: any) {
       const name = question.value;
       if (name)
         return [name.first, name.middle, name.last]
@@ -763,7 +767,7 @@ function initNameBlock(Survey) {
       return question.defaultSubstitution;
     },
     htmlTemplate: "<div></div>",
-    afterRender: function(question, el) {
+    afterRender: function(question: any, el: any) {
       while (el.childNodes.length) el.removeChild(el.childNodes[0]);
 
       const outer = document.createElement("div");
@@ -774,8 +778,8 @@ function initNameBlock(Survey) {
       let row;
       let cell;
       let input;
-      const acceptLbl = null;
-      const acceptRow = null;
+      let acceptLbl: any;
+      let acceptRow : any;
       // let acceptBtn;
       // let cancelBtn;
       outer.className = outerCls;
@@ -814,19 +818,20 @@ function initNameBlock(Survey) {
           acceptLbl.innerText = question.value ? "Update Name" : "Continue";
       };
       let focused = false;
-      let acceptTimeout = null;
-      const acceptValue = function(evt?) {
+      let acceptTimeout: any = null;
+      const acceptValue = function(evt?: any) {
         question.value = curVal;
       };
       let updated = false;
-      const updateValue = function(evt) {
+      const updateValue = function(evt: any) {
         if (acceptTimeout) {
           clearTimeout(acceptTimeout);
           acceptTimeout = null;
         }
         let empty = true;
         curVal = {};
-        for (const field of fields) {
+        let field: any = {};
+        for (field of fields) {
           curVal[field.name] = field.input.value.trim();
           if (curVal[field.name].length) empty = false;
         }
@@ -835,7 +840,7 @@ function initNameBlock(Survey) {
         if (question.value) updated = true;
         acceptValue();
       };
-      const updateFocus = function(evt) {
+      const updateFocus = function(evt: any) {
         focused = evt.type === "focus";
         if (acceptTimeout) {
           clearTimeout(acceptTimeout);
@@ -845,8 +850,8 @@ function initNameBlock(Survey) {
         //   acceptTimeout = setTimeout(acceptValue, 1000);
         // }
       };
-
-      for (const field of fields) {
+      let field: any = {};
+      for (field of fields) {
         cell = document.createElement("div");
         cell.className = "col-sm-4";
         label = document.createElement("label");
@@ -908,7 +913,8 @@ function initNameBlock(Survey) {
 
       question.valueChangedCallback = () => {
         const val = question.value || {};
-        for (const field of fields) {
+        let field: any = {};
+        for (field of fields) {
           field.input.value = val[field.name] || "";
         }
         checkAccept();
@@ -919,13 +925,13 @@ function initNameBlock(Survey) {
         setTimeout(question.valueChangedCallback, 50);
       }
     },
-    willUnmount: function(question, el) {}
+    willUnmount: function(question: any, el: any) {}
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
-function initContactInfoBlock(Survey) {
+function initContactInfoBlock(Survey: any) {
   const widget = {
     name: "contactinfo",
     title: "Contact Info",
@@ -933,10 +939,10 @@ function initContactInfoBlock(Survey) {
     widgetIsLoaded: function() {
       return true;
     },
-    isFit: function(question) {
+    isFit: function(question: any) {
       return question.getType() === "contactinfo";
     },
-    activatedByChanged: function(activatedBy) {
+    activatedByChanged: function(activatedBy: any) {
       Survey.JsonObject.metaData.addClass(
         "contactinfo",
         [
@@ -955,7 +961,7 @@ function initContactInfoBlock(Survey) {
       );
     },
     htmlTemplate: "<div></div>",
-    afterRender: function(question, el) {
+    afterRender: function(question: any, el: any) {
       while (el.childNodes.length) el.removeChild(el.childNodes[0]);
 
       const outer = document.createElement("div");
@@ -975,14 +981,16 @@ function initContactInfoBlock(Survey) {
         { name: "fax", label: "Fax", input: null }
       ];
       const updateValue = function() {
-        const parts = {};
-        for (const field of fields) {
+        let parts: any = {};
+        let field: any = {};
+        for (field of fields) {
           parts[field.name] = field.input.value.trim();
         }
         question.value = parts["phone"] ? parts : null;
       };
 
-      for (const field of fields) {
+      let field: any = {};
+      for (field of fields) {
         const altLbl =
           "label" + field.name[0].toUpperCase() + field.name.substring(1);
         cell = document.createElement("div");
@@ -1006,7 +1014,8 @@ function initContactInfoBlock(Survey) {
       el.appendChild(outer);
 
       question.valueChangedCallback = () => {
-        for (const field of fields) {
+        let field: any = {};
+        for (field of fields) {
           field.input.value =
             (question.value && question.value[field.name]) || "";
         }
@@ -1017,13 +1026,13 @@ function initContactInfoBlock(Survey) {
         setTimeout(question.valueChangedCallback, 50);
       }
     },
-    willUnmount: function(question, el) {}
+    willUnmount: function(question: any, el: any) {}
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
-function initCustomDate(Survey) {
+function initCustomDate(Survey: any) {
   const widget = {
     name: "date",
     title: "Date Input",
@@ -1031,10 +1040,10 @@ function initCustomDate(Survey) {
     widgetIsLoaded: function() {
       return true;
     },
-    isFit: function(question) {
+    isFit: function(question: any) {
       return question.inputType === "date";
     },
-    activatedByChanged: function(activatedBy) {
+    activatedByChanged: function(activatedBy: any) {
       Survey.JsonObject.metaData.addProperties("text", [
         {
           name: "dateYearsAhead:number",
@@ -1061,7 +1070,7 @@ function initCustomDate(Survey) {
       "November",
       "December"
     ],
-    afterRender: function(question, el) {
+    afterRender: function(question: any, el: any) {
       while (el.childNodes.length) el.removeChild(el.childNodes[0]);
 
       let yearVal = "";
@@ -1094,7 +1103,7 @@ function initCustomDate(Survey) {
         }
         daySel.value = dayVal;
       };
-      const updateValue = function(evt?) {
+      const updateValue = function(evt?: any) {
         updateDay();
         if (yearVal && monthVal && dayVal) {
           let dt = "" + yearVal + "-";
@@ -1181,14 +1190,14 @@ function initCustomDate(Survey) {
         setTimeout(question.valueChangedCallback, 50);
       }
     },
-    willUnmount: function(question, el) {}
+    willUnmount: function(question: any, el: any) {}
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "property");
 }
 
 // Returns 'y' or 'n', or 'u' for undefined and 'e' for error
-function isChild(params) {
+function isChild(params: any) {
   if (!params && !params.length) return "u";
   const DOB = params[0];
   const MinorOrAdult = params[1];
@@ -1227,7 +1236,7 @@ function isChild(params) {
   else return "e";
 }
 
-export function addQuestionTypes(Survey) {
+export function addQuestionTypes(Survey: any) {
   // fixCheckboxes(Survey);
   initYesNo(Survey);
   initInfoText(Survey);
@@ -1239,7 +1248,7 @@ export function addQuestionTypes(Survey) {
   Survey.FunctionFactory.Instance.register("isChild", isChild);
 }
 
-export function addToolboxOptions(editor) {
+export function addToolboxOptions(editor: any) {
   editor.toolbox.addItem({
     name: "yesno",
     title: "Yes/No Choice",

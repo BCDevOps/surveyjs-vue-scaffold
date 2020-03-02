@@ -1,29 +1,46 @@
 <template>
-  <div class="fill-height-lg" id="Selected forms">
+  <div
+    class="fill-height-lg survey-container contentcontainer codecontainer"
+    id="fpocomponent"
+  >
+    <h2>Getting Started</h2>
     <b-container class="fill-body">
+      <survey :survey="survey"></survey>
       <!--div id="surveyResult"></div-->
-      <GettingStarted v-if="form === 'getting-started'" />
-      <FPO v-else-if="form === 'fpo'" />
-      <FLM v-else-if="form === 'flm'" />
-      <ChildRelocation v-else-if="form === 'child-relocation'" />
-      <Parenting v-else-if="form === 'parenting'" />
-      <CaseMgmt v-else-if="form === 'case-mgmt'" />
-      <Enforcement v-else-if="form === 'enforcement'" />
     </b-container>
   </div>
 </template>
 
 <script>
 import * as SurveyVue from "survey-vue";
-import GettingStarted from "./GettingStarted";
-import FPO from "./FPO";
-import FLM from "./FLM";
-import ChildRelocation from "./ChildRelocation";
-import Parenting from "./Parenting.vue";
-import CaseMgmt from "./CaseMgmt.vue";
-import Enforcement from "./Enforcement.vue";
+import { addQuestionTypes } from "./question-types.ts";
 
 SurveyVue.StylesManager.applyTheme("bcgov");
+addQuestionTypes(SurveyVue);
+
+var surveyJSON = {
+  pages: [
+    {
+      name: "page1",
+      elements: [
+        {
+          type: "checkbox",
+          name: "question1",
+          title: "Which forms apply to you",
+          choices: [
+            { value: "item1", text: "Family protection order" },
+            { value: "item2", text: "Family law matter" },
+            { value: "item3", text: "Child relocation" },
+            { value: "item4", text: "Parenting arrangements" },
+            { value: "item5", text: "Case management" },
+            { value: "item6", text: "Enforcement" }
+          ]
+        }
+      ],
+      title: "Select your forms"
+    }
+  ]
+};
 
 /* survey.onComplete.add(function(result) {
   document.querySelector("#surveyResult").textContent =
@@ -31,21 +48,11 @@ SurveyVue.StylesManager.applyTheme("bcgov");
 }); */
 
 export default {
-  name: "SelectedForms",
+  name: "GettingStarted",
   data() {
-    return {};
-  },
-  components: {
-    GettingStarted,
-    FPO,
-    FLM,
-    ChildRelocation,
-    Parenting,
-    CaseMgmt,
-    Enforcement
-  },
-  props: {
-    form: String
+    var survey = new SurveyVue.Model(surveyJSON);
+    //console.log("surveyPrimaryJSON = " + JSON.stringify(surveyPrimaryJSON, null, 3));
+    return { survey: survey };
   }
 };
 </script>
@@ -115,5 +122,8 @@ a.util-nav {
 }
 .btn-primary {
   border-color: #ccc;
+}
+.contentcontainer {
+  min-height: 40em;
 }
 </style>

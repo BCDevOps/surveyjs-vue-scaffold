@@ -5,26 +5,57 @@
       <div class="sidebar-container" id="SurveySidebarComponent">
         <div class="sidebar-title"><h3>Application Steps</h3></div>
         <ul class="links">
-          <li class="current" tabindex="0">
+          <li
+            tabindex="0"
+            class="current"
+            id="getting-started"
+            v-on:click="onClick($event)"
+          >
             <div class="link-icon">1</div>
-            <div class="link-label">Your Information</div>
+            <div class="link-label">Getting Started</div>
           </li>
-          <li tabindex="0">
+          <li tabindex="0" id="fpo" v-on:click="onClick($event)">
             <div class="link-icon">2</div>
-            <div class="link-label">Your (ex-)Partner's Information</div>
+            <div class="link-label">FPO Form</div>
+            <div id="fpo-group" style="display: none">
+              <ul class="links">
+                <li tabindex="1">
+                  <div class="link-label">Your Information</div>
+                </li>
+                <li tabindex="1">
+                  <div class="link-label">Your (ex-)Partner's Info</div>
+                </li>
+                <li tabindex="1">
+                  <div class="link-label">Your Children's Information</div>
+                </li>
+              </ul>
+            </div>
           </li>
-          <!--li tabindex="0">
+          <li tabindex="0" id="flm" v-on:click="onClick($event)">
             <div class="link-icon">3</div>
-            <div class="link-label">Your Children's Information</div>
+            <div class="link-label">FLM</div>
           </li>
-          <li tabindex="0">
+          <li tabindex="0" id="child-relocation" v-on:click="onClick($event)">
             <div class="link-icon">4</div>
-            <div class="link-label">Your Safety Needs</div>
+            <div class="link-label">Child Relocation</div>
           </li>
-          <li tabindex="0">
+          <li tabindex="0" id="parenting" v-on:click="onClick($event)">
             <div class="link-icon">5</div>
-            <div class="link-label">Your Story</div>
-          </li-->
+            <div class="link-label">Parenting</div>
+          </li>
+          <li tabindex="0" id="case-mgmt" v-on:click="onClick($event)">
+            <div class="link-icon">6</div>
+            <div class="link-label">Case Management</div>
+          </li>
+          <li tabindex="0" id="enforcement" v-on:click="onClick($event)">
+            <div class="link-icon">7</div>
+            <div class="link-label">Enforcement</div>
+          </li>
+          <li class="separate" />
+          <li tabindex="-1" id="print" class="disabled">
+            <div class="link-icon">8</div>
+            <div class="link-label">Print Application Forms</div>
+          </li>
         </ul>
       </div>
     </survey-sidebar>
@@ -38,6 +69,32 @@ export default {
   name: "SurveySidebarComponent",
   data() {
     return {};
+  },
+  methods: {
+    onClick: function(event) {
+      var fpo = document.getElementById("fpo");
+      var fpo_group = document.getElementById("fpo-group");
+      var prev = document.getElementById(this.selectedForm);
+      var curr = event.currentTarget;
+
+      if (prev == curr) {
+        // same choice; do nothing
+      } else {
+        curr.classList.add("current");
+        prev.classList.remove("current");
+
+        if (prev == fpo) {
+          fpo_group.style.display = "none";
+        } else if (curr == fpo) {
+          fpo_group.style.display = "block";
+        }
+      }
+
+      this.$emit("updated-selection", event.currentTarget.id);
+    }
+  },
+  props: {
+    selectedForm: String
   }
 };
 </script>

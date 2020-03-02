@@ -13,9 +13,11 @@
 
 <script>
 import * as SurveyVue from "survey-vue";
-import surveyPrimaryJSON from "../assets/survey-primary.json";
+import surveyPrimaryJSON from "../assets/survey-information.json";
+import { addQuestionTypes } from "./question-types.ts";
 
 SurveyVue.StylesManager.applyTheme("bcgov");
+addQuestionTypes(SurveyVue);
 
 /* survey.onComplete.add(function(result) {
   document.querySelector("#surveyResult").textContent =
