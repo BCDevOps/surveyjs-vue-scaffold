@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      selectedForm: "fpo"
+      selectedForm: "getting-started"
     };
   }
 };
@@ -77,11 +77,7 @@ export default {
   max-width: 100%;
   padding-top: 0;
   padding-bottom: 3.5rem;
-}
-
-.app-main {
-  flex: auto;
-  padding: 0 15px 80px;
+  min-height: 100%;
 }
 
 .sidebar-left,

@@ -13,7 +13,7 @@
 
 <script>
 import * as SurveyVue from "survey-vue";
-import surveyPrimaryJSON from "../assets/survey-primary.json";
+import surveyPrimaryJSON from "../assets/survey-information.json";
 
 SurveyVue.StylesManager.applyTheme("bcgov");
 

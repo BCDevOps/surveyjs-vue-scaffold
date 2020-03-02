@@ -5,21 +5,21 @@
       <div class="sidebar-container" id="SurveySidebarComponent">
         <div class="sidebar-title"><h3>Application Steps</h3></div>
         <ul class="links">
-          <li tabindex="0">
-            <div class="link-icon">1</div>
-            <div class="link-label">Initial Survey</div>
-          </li>
           <li
             tabindex="0"
-            class="div-icon-label"
-            id="main1"
-            v-on:click="myFunction('main1')"
+            class="current"
+            id="getting-started"
+            v-on:click="onClick($event)"
           >
+            <div class="link-icon">1</div>
+            <div class="link-label">Getting Started</div>
+          </li>
+          <li tabindex="0" id="fpo" v-on:click="onClick($event)">
             <div class="link-icon">2</div>
             <div class="link-label">FPO Form</div>
-            <div id="sub1">
+            <div id="fpo-group" style="display: none">
               <ul class="links">
-                <li tabindex="1" class="current">
+                <li tabindex="1">
                   <div class="link-label">Your Information</div>
                 </li>
                 <li tabindex="1">
@@ -31,25 +31,30 @@
               </ul>
             </div>
           </li>
-          <li tabindex="0" id="main2" v-on:click="myFunction('main2')">
+          <li tabindex="0" id="flm" v-on:click="onClick($event)">
             <div class="link-icon">3</div>
             <div class="link-label">FLM</div>
           </li>
-          <li tabindex="0">
+          <li tabindex="0" id="child-relocation" v-on:click="onClick($event)">
             <div class="link-icon">4</div>
             <div class="link-label">Child Relocation</div>
           </li>
-          <li tabindex="0">
+          <li tabindex="0" id="parenting" v-on:click="onClick($event)">
             <div class="link-icon">5</div>
             <div class="link-label">Parenting</div>
           </li>
-          <li tabindex="0">
+          <li tabindex="0" id="case-mgmt" v-on:click="onClick($event)">
             <div class="link-icon">6</div>
             <div class="link-label">Case Management</div>
           </li>
-          <li tabindex="0">
+          <li tabindex="0" id="enforcement" v-on:click="onClick($event)">
             <div class="link-icon">7</div>
             <div class="link-label">Enforcement</div>
+          </li>
+          <li class="separate" />
+          <li tabindex="-1" id="print" class="disabled">
+            <div class="link-icon">8</div>
+            <div class="link-label">Print Application Forms</div>
           </li>
         </ul>
       </div>
@@ -66,23 +71,26 @@ export default {
     return {};
   },
   methods: {
-    myFunction: function(x) {
-      var sub = document.getElementById("sub1");
-      var main1 = document.getElementById("main1");
-      var main2 = document.getElementById("main2");
-      var curr = document.getElementById(x);
+    onClick: function(event) {
+      var fpo = document.getElementById("fpo");
+      var fpo_group = document.getElementById("fpo-group");
+      var prev = document.getElementById(this.selectedForm);
+      var curr = event.currentTarget;
 
-      if (main1 == curr) {
-        sub.style.display = "block";
-        sub.classList.add("current");
-        main2.classList.remove("current");
-        this.$emit("updated-selection", "fpo");
+      if (prev == curr) {
+        // same choice; do nothing
       } else {
-        sub.style.display = "none";
-        main2.classList.add("current");
-        sub.classList.remove("current");
-        this.$emit("updated-selection", "flm");
+        curr.classList.add("current");
+        prev.classList.remove("current");
+
+        if (prev == fpo) {
+          fpo_group.style.display = "none";
+        } else if (curr == fpo) {
+          fpo_group.style.display = "block";
+        }
       }
+
+      this.$emit("updated-selection", event.currentTarget.id);
     }
   },
   props: {

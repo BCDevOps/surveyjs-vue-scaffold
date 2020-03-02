@@ -1,5 +1,5 @@
 <template>
-  <div class="enforcement">
+  <div class="fill-height-lg survey-container contentcontainer codecontainer">
     <h1>Enforcement form</h1>
     <p>{{ message }}</p>
     <p>{{ message2 }}</p>
@@ -33,5 +33,8 @@ li {
 }
 a {
   color: #5c42b9;
+}
+.contentcontainer {
+  min-height: 40em;
 }
 </style>

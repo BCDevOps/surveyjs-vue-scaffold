@@ -1,5 +1,5 @@
 <template>
-  <div class="parenting">
+  <div class="fill-height-lg survey-container contentcontainer codecontainer">
     <h1>Parenting arrangements form</h1>
     <p>{{ message }}</p>
     <p>{{ message2 }}</p>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: "ChildRelocation",
+  name: "Parenting",
   data: function() {
     return {
       message: "This is a parenting arrangements form",
@@ -33,5 +33,8 @@ li {
 }
 a {
   color: #5c42b9;
+}
+.contentcontainer {
+  min-height: 40em;
 }
 </style>
