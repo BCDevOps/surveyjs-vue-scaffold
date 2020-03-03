@@ -1,79 +1,77 @@
 <template>
   <!-- https://www.w3schools.com/howto/howto_css_sidebar_responsive.asp -->
-  <app-insert class="sidebar-left" id="sidebar-left">
-    <survey-sidebar>
-      <div class="sidebar-container" id="SurveySidebarComponent">
-        <div class="sidebar-title">
-          <h3>Application Steps</h3>
-        </div>
-        <ul class="links">
-          <li
-            tabindex="0"
-            class="current"
-            id="getting-started"
-            v-on:click="onSelectStage($event)"
-          >
-            <div class="link-icon">1</div>
-            <div class="link-label">Getting Started</div>
-          </li>
-          <li
-            tabindex="0"
-            id="applicant-information"
-            v-on:click="onSelectStage($event)"
-          >
-            <div class="link-icon">2</div>
-            <div class="link-label">Applicant information</div>
-          </li>
-          <li tabindex="0" id="fpo" v-on:click="onSelectStage($event)">
-            <div class="link-icon">3</div>
-            <div class="link-label">FPO Form</div>
-            <div id="fpo-group" style="display: none">
-              <ul class="links">
-                <li tabindex="1">
-                  <div class="link-label">Your Information</div>
-                </li>
-                <li tabindex="1">
-                  <div class="link-label">Your (ex-)Partner's Info</div>
-                </li>
-                <li tabindex="1">
-                  <div class="link-label">Your Children's Information</div>
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li tabindex="0" id="flm" v-on:click="onSelectStage($event)">
-            <div class="link-icon">4</div>
-            <div class="link-label">FLM</div>
-          </li>
-          <li
-            tabindex="0"
-            id="child-relocation"
-            v-on:click="onSelectStage($event)"
-          >
-            <div class="link-icon">5</div>
-            <div class="link-label">Child Relocation</div>
-          </li>
-          <li tabindex="0" id="parenting" v-on:click="onSelectStage($event)">
-            <div class="link-icon">6</div>
-            <div class="link-label">Parenting</div>
-          </li>
-          <li tabindex="0" id="case-mgmt" v-on:click="onSelectStage($event)">
-            <div class="link-icon">7</div>
-            <div class="link-label">Case Management</div>
-          </li>
-          <li tabindex="0" id="enforcement" v-on:click="onSelectStage($event)">
-            <div class="link-icon">8</div>
-            <div class="link-label">Enforcement</div>
-          </li>
-          <li class="separate" />
-          <li tabindex="-1" id="print" class="disabled">
-            <div class="link-icon">9</div>
-            <div class="link-label">Print Application Forms</div>
-          </li>
-        </ul>
+  <div class="sidebar-left" id="sidebar-left">
+    <div class="sidebar-container" id="SurveySidebarComponent">
+      <div class="sidebar-title">
+        <h3>Application Steps</h3>
       </div>
-    </survey-sidebar>
-  </app-insert>
+      <ul class="links">
+        <li
+          tabindex="0"
+          class="current"
+          id="getting-started"
+          v-on:click="onSelectStage($event)"
+        >
+          <div class="link-icon">1</div>
+          <div class="link-label">Getting Started</div>
+        </li>
+        <li
+          tabindex="0"
+          id="applicant-information"
+          v-on:click="onSelectStage($event)"
+        >
+          <div class="link-icon">2</div>
+          <div class="link-label">Applicant information</div>
+        </li>
+        <li tabindex="0" id="fpo" v-on:click="onSelectStage($event)">
+          <div class="link-icon">3</div>
+          <div class="link-label">FPO Form</div>
+          <div id="fpo-group" style="display: none">
+            <ul class="links">
+              <li tabindex="1">
+                <div class="link-label">Your Information</div>
+              </li>
+              <li tabindex="1">
+                <div class="link-label">Your (ex-)Partner's Info</div>
+              </li>
+              <li tabindex="1">
+                <div class="link-label">Your Children's Information</div>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li tabindex="0" id="flm" v-on:click="onSelectStage($event)">
+          <div class="link-icon">4</div>
+          <div class="link-label">FLM</div>
+        </li>
+        <li
+          tabindex="0"
+          id="child-relocation"
+          v-on:click="onSelectStage($event)"
+        >
+          <div class="link-icon">5</div>
+          <div class="link-label">Child Relocation</div>
+        </li>
+        <li tabindex="0" id="parenting" v-on:click="onSelectStage($event)">
+          <div class="link-icon">6</div>
+          <div class="link-label">Parenting</div>
+        </li>
+        <li tabindex="0" id="case-mgmt" v-on:click="onSelectStage($event)">
+          <div class="link-icon">7</div>
+          <div class="link-label">Case Management</div>
+        </li>
+        <li tabindex="0" id="enforcement" v-on:click="onSelectStage($event)">
+          <div class="link-icon">8</div>
+          <div class="link-label">Enforcement</div>
+        </li>
+        <li class="separate" />
+        <li tabindex="-1" id="print" class="disabled">
+          <div class="link-icon">9</div>
+          <div class="link-label">Print Application Forms</div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>
