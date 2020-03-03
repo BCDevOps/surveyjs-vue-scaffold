@@ -1,9 +1,9 @@
 <template>
   <div
     class="fill-height-lg survey-container contentcontainer codecontainer"
-    id="fpocomponent"
+    id="applicantinfocomponent"
   >
-    <h2>FPO form</h2>
+    <h2>Application information</h2>
     <b-container class="fill-body">
       <survey :survey="survey"></survey>
       <!--div id="surveyResult"></div-->
@@ -25,11 +25,10 @@ addQuestionTypes(SurveyVue);
 }); */
 
 export default {
-  name: "FPO",
+  name: "ApplicantInfo",
   data() {
     var survey = new SurveyVue.Model(surveyPrimaryJSON);
     //console.log("surveyPrimaryJSON = " + JSON.stringify(surveyPrimaryJSON, null, 3));
-    console.log(survey);
     return { survey: survey };
   }
 };

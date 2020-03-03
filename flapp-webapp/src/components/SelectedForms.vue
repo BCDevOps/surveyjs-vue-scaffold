@@ -3,6 +3,7 @@
     <b-container class="fill-body">
       <!--div id="surveyResult"></div-->
       <GettingStarted v-if="form === 'getting-started'" />
+      <ApplicantInfo v-else-if="form === 'applicant-information'" />
       <FPO v-else-if="form === 'fpo'" />
       <FLM v-else-if="form === 'flm'" />
       <ChildRelocation v-else-if="form === 'child-relocation'" />
@@ -16,6 +17,7 @@
 <script>
 import * as SurveyVue from "survey-vue";
 import GettingStarted from "./GettingStarted";
+import ApplicantInfo from "./ApplicantInfo.vue";
 import FPO from "./FPO";
 import FLM from "./FLM";
 import ChildRelocation from "./ChildRelocation";
@@ -37,6 +39,7 @@ export default {
   },
   components: {
     GettingStarted,
+    ApplicantInfo,
     FPO,
     FLM,
     ChildRelocation,
