@@ -1,31 +1,23 @@
 <template>
-  <div class="fill-height-lg" id="Selected forms">
+  <div
+    class="fill-height-lg survey-container contentcontainer codecontainer"
+    id="applicantinfocomponent"
+  >
+    <h2>Application information</h2>
     <b-container class="fill-body">
+      <survey :survey="survey"></survey>
       <!--div id="surveyResult"></div-->
-      <GettingStarted v-if="form === 'getting-started'" />
-      <ApplicantInfo v-else-if="form === 'applicant-information'" />
-      <FPO v-else-if="form === 'fpo'" />
-      <FLM v-else-if="form === 'flm'" />
-      <ChildRelocation v-else-if="form === 'child-relocation'" />
-      <Parenting v-else-if="form === 'parenting'" />
-      <CaseMgmt v-else-if="form === 'case-mgmt'" />
-      <Enforcement v-else-if="form === 'enforcement'" />
     </b-container>
   </div>
 </template>
 
 <script>
 import * as SurveyVue from "survey-vue";
-import GettingStarted from "./GettingStarted";
-import ApplicantInfo from "./ApplicantInfo.vue";
-import FPO from "./FPO";
-import FLM from "./FLM";
-import ChildRelocation from "./ChildRelocation";
-import Parenting from "./Parenting.vue";
-import CaseMgmt from "./CaseMgmt.vue";
-import Enforcement from "./Enforcement.vue";
+import surveyPrimaryJSON from "../assets/survey-information.json";
+import { addQuestionTypes } from "./question-types.ts";
 
 SurveyVue.StylesManager.applyTheme("bcgov");
+addQuestionTypes(SurveyVue);
 
 /* survey.onComplete.add(function(result) {
   document.querySelector("#surveyResult").textContent =
@@ -33,22 +25,11 @@ SurveyVue.StylesManager.applyTheme("bcgov");
 }); */
 
 export default {
-  name: "SelectedForms",
+  name: "ApplicantInfo",
   data() {
-    return {};
-  },
-  components: {
-    GettingStarted,
-    ApplicantInfo,
-    FPO,
-    FLM,
-    ChildRelocation,
-    Parenting,
-    CaseMgmt,
-    Enforcement
-  },
-  props: {
-    form: String
+    var survey = new SurveyVue.Model(surveyPrimaryJSON);
+    //console.log("surveyPrimaryJSON = " + JSON.stringify(surveyPrimaryJSON, null, 3));
+    return { survey: survey };
   }
 };
 </script>
