@@ -1,16 +1,16 @@
 <template>
   <div class="app-outer fill-body" id="app">
-    <Navigation></Navigation>
+    <SurveyControl></SurveyControl>
   </div>
 </template>
 
 <script>
-import Navigation from "./components/Navigation.vue";
+import SurveyControl from "./components/SurveyControl.vue";
 
 export default {
   name: "app",
   components: {
-    Navigation
+    SurveyControl
   },
 
   data() {

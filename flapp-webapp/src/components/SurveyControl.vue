@@ -1,5 +1,5 @@
 <template>
-  <div class=" fill-body" id="navigation">
+  <div class=" fill-body" id="SurveyControl">
     <Navbar />
     <main class="app-content fill-body">
       <SurveySidebarComponent
@@ -21,7 +21,7 @@ import SelectedForms from "./SelectedForms.vue";
 import Footer from "./Footer.vue";
 
 export default {
-  name: "Navigation",
+  name: "SurveyControl",
   components: {
     Navbar,
     Footer,
@@ -54,6 +54,13 @@ export default {
     return {
       selectedForm: "getting-started"
     };
+  },
+  surveyTitles: {
+    title: "",
+    pages: {
+      title: "",
+      page_index: ""
+    }
   }
 };
 </script>
