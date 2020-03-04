@@ -1,20 +1,59 @@
 <template>
-  <div class="app-outer fill-body" id="app">
-    <Navigation></Navigation>
+  <div class=" fill-body" id="navigation">
+    <Navbar />
+    <main class="app-content fill-body">
+      <SurveySidebarComponent
+        v-bind:selectedForm="selectedForm"
+        @updated-selection="onSidebarClicked"
+      />
+      <SelectedForms v-bind:form="selectedForm" />
+      <!--SurveyCreatorComponent /-->
+    </main>
+    <Footer id="footer" />
   </div>
 </template>
 
 <script>
-import Navigation from "./components/Navigation.vue";
+import Navbar from "./Navbar";
+import SurveySidebarComponent from "./SurveySidebarComponent.vue";
+import SelectedForms from "./SelectedForms.vue";
+//import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
+import Footer from "./Footer.vue";
 
 export default {
-  name: "app",
+  name: "Navigation",
   components: {
-    Navigation
-  },
+    Navbar,
+    Footer,
+    SurveySidebarComponent,
+    SelectedForms
+    //ApplicantExperience
 
+    //SurveyCreatorComponent
+  },
+  methods: {
+    onSidebarClicked(value) {
+      console.log("Was '" + this.form + "'");
+      this.form = value;
+      console.log("Is now '" + this.form + "'");
+
+      return value;
+    }
+  },
+  computed: {
+    form: {
+      get: function() {
+        return this.selectedForm;
+      },
+      set: function(newValue) {
+        this.selectedForm = newValue;
+      }
+    }
+  },
   data() {
-    return {};
+    return {
+      selectedForm: "getting-started"
+    };
   }
 };
 </script>
