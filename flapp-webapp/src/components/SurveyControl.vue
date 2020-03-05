@@ -4,7 +4,9 @@
     <main class="app-content fill-body">
       <SurveySidebarComponent
         v-bind:selectedForm="selectedForm"
+        v-bind:selectedStep="selectedStep"
         @updated-selection="onSidebarClicked"
+        @updated-step="onLoadSurveyTitles"
       />
       <SelectedForms v-bind:form="selectedForm" />
       <!--SurveyCreatorComponent /-->
@@ -31,15 +33,6 @@ export default {
 
     //SurveyCreatorComponent
   },
-  methods: {
-    onSidebarClicked(value) {
-      console.log("Was '" + this.form + "'");
-      this.form = value;
-      console.log("Is now '" + this.form + "'");
-
-      return value;
-    }
-  },
   computed: {
     form: {
       get: function() {
@@ -48,18 +41,35 @@ export default {
       set: function(newValue) {
         this.selectedForm = newValue;
       }
+    },
+    step: {
+      get: function() {
+        return this.selectedStep;
+      },
+      set: function(newValue) {
+        this.selectedStep = newValue;
+      }
     }
   },
   data() {
     return {
-      selectedForm: "getting-started"
+      selectedForm: "getting-started",
+      selectedStep: "step1"
     };
   },
-  surveyTitles: {
-    title: "",
-    pages: {
-      title: "",
-      page_index: ""
+  methods: {
+    onLoadSurveyTitles(value) {
+      console.log("Was '" + this.step + "'");
+      this.step = value;
+      console.log("Is now '" + this.step + "'");
+      return value;
+    },
+    onSidebarClicked(value) {
+      console.log("Was '" + this.form + "'");
+      this.form = value;
+      console.log("Is now '" + this.form + "'");
+
+      return value;
     }
   }
 };

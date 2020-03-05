@@ -28,9 +28,19 @@
           <div class="link-label">FPO Form</div>
           <div id="fpo-group" style="display: none">
             <ul class="links">
-              <li tabindex="1">
-                <div class="link-label">Your Information</div>
-              </li>
+              <li
+                tabindex="1"
+                class="link-label"
+                id="step1"
+                v-on:click="onSelectStep($event)"
+              ></li>
+              <li
+                tabindex="1"
+                class="link-label"
+                id="step2"
+                v-on:click="onSelectStep($event)"
+              ></li>
+
               <li tabindex="1">
                 <div class="link-label">Your (ex-)Partner's Info</div>
               </li>
@@ -102,13 +112,23 @@ export default {
         }
       }
 
+      //console.log("updated-selection id :" + event.currentTarget.id);
+      //console.log("updated-selection value :" + event.currentTarget.value);
+
       this.$emit("updated-selection", event.currentTarget.id);
     },
-    //TODO: This is where the sub-step is selected
-    onSelectStep: function(event) {}
+    //TODO: This is where the step is selected
+    onSelectStep: function(event) {
+      var fpo_group = document.getElementById("step1");
+      console.log("clicked on step 1/2 : " + step1);
+      var prev = document.getElementById(this.selectedStep);
+
+      this.$emit("updated-step", event.currentTarget.id);
+    }
   },
   props: {
-    selectedForm: String
+    selectedForm: String,
+    selectedStep: String
   }
 };
 </script>

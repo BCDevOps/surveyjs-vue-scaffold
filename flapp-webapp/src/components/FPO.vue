@@ -28,11 +28,25 @@ export default {
   name: "FPO",
   data() {
     var survey = new SurveyVue.Model(surveyPrimaryJSON);
+    console.log(survey.title);
+    console.log(survey.PageCount);
     console.log(survey.pages[0].title);
     console.log(survey.pages[1].title);
     //console.log("surveyPrimaryJSON = " + JSON.stringify(surveyPrimaryJSON, null, 3));
     console.log(survey);
-    return { survey: survey };
+    survey.completeText = "Next";
+    return {
+      survey: survey,
+      stage: {
+        title: "",
+        steps: [
+          {
+            title: "",
+            step_index: ""
+          }
+        ]
+      }
+    };
   }
 };
 </script>
