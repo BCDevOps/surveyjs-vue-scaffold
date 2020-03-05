@@ -1,9 +1,8 @@
 <template>
   <div
     class="fill-height-lg survey-container contentcontainer codecontainer"
-    id="SurveyComponent"
+    id="flmstage"
   >
-    <h2>FLM form</h2>
     <b-container class="fill-body">
       <survey :survey="survey"></survey>
       <!--div id="surveyResult"></div-->
@@ -23,7 +22,7 @@ SurveyVue.StylesManager.applyTheme("bcgov");
 }); */
 
 export default {
-  name: "FLMform",
+  name: "FLMstage",
   data() {
     var survey = new SurveyVue.Model(surveyPrimaryJSON);
     console.log(survey.title);

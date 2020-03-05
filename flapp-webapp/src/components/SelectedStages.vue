@@ -1,15 +1,15 @@
 <template>
-  <div class="fill-height-lg" id="Selected forms">
+  <div class="fill-height-lg" id="selectedstages">
     <b-container class="fill-body">
       <!--div id="surveyResult"></div-->
-      <GettingStarted v-if="form === 'getting-started'" />
-      <ApplicantInfo v-else-if="form === 'applicant-information'" />
-      <FPO v-else-if="form === 'fpo'" />
-      <FLM v-else-if="form === 'flm'" />
-      <ChildRelocation v-else-if="form === 'child-relocation'" />
-      <Parenting v-else-if="form === 'parenting'" />
-      <CaseMgmt v-else-if="form === 'case-mgmt'" />
-      <Enforcement v-else-if="form === 'enforcement'" />
+      <GettingStarted v-if="stage === 'getting-started'" />
+      <ApplicantInfo v-else-if="stage === 'applicant-information'" />
+      <FPO v-else-if="stage === 'fpo'" />
+      <FLM v-else-if="stage === 'flm'" />
+      <ChildRelocation v-else-if="stage === 'child-relocation'" />
+      <Parenting v-else-if="stage === 'parenting'" />
+      <CaseMgmt v-else-if="stage === 'case-mgmt'" />
+      <Enforcement v-else-if="stage === 'enforcement'" />
     </b-container>
   </div>
 </template>
@@ -33,7 +33,7 @@ SurveyVue.StylesManager.applyTheme("bcgov");
 }); */
 
 export default {
-  name: "SelectedForms",
+  name: "SelectedStages",
   data() {
     return {};
   },
@@ -48,7 +48,7 @@ export default {
     Enforcement
   },
   props: {
-    form: String
+    stage: String
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div
     class="fill-height-lg survey-container contentcontainer codecontainer"
-    id="fpocomponent"
+    id="fpostage"
   >
     <h2>FPO form</h2>
     <b-container class="fill-body">

@@ -96,7 +96,7 @@ export default {
     onSelectStage: function(event) {
       var fpo = document.getElementById("fpo");
       var fpo_group = document.getElementById("fpo-group");
-      var prev = document.getElementById(this.selectedForm);
+      var prev = document.getElementById(this.selectedStage);
       var curr = event.currentTarget;
 
       if (prev == curr) {
@@ -115,7 +115,7 @@ export default {
       //console.log("updated-selection id :" + event.currentTarget.id);
       //console.log("updated-selection value :" + event.currentTarget.value);
 
-      this.$emit("updated-selection", event.currentTarget.id);
+      this.$emit("updated-stage", event.currentTarget.id);
     },
     //TODO: This is where the step is selected
     onSelectStep: function(event) {
@@ -127,7 +127,7 @@ export default {
     }
   },
   props: {
-    selectedForm: String,
+    selectedStage: String,
     selectedStep: String
   }
 };

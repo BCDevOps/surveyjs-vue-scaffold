@@ -3,12 +3,12 @@
     <Navbar />
     <main class="app-content fill-body">
       <SurveySidebarComponent
-        v-bind:selectedForm="selectedForm"
+        v-bind:selectedStage="selectedStage"
         v-bind:selectedStep="selectedStep"
-        @updated-selection="onSidebarClicked"
-        @updated-step="onLoadSurveyTitles"
+        v-on:updated-stage="onSidebarClicked"
+        v-on:updated-step="onLoadStepTitles"
       />
-      <SelectedForms v-bind:form="selectedForm" />
+      <SelectedStages v-bind:stage="selectedStage" />
       <!--SurveyCreatorComponent /-->
     </main>
     <Footer id="footer" />
@@ -18,7 +18,7 @@
 <script>
 import Navbar from "./Navbar";
 import SurveySidebarComponent from "./SurveySidebarComponent.vue";
-import SelectedForms from "./SelectedForms.vue";
+import SelectedStages from "./SelectedStages.vue";
 //import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
 import Footer from "./Footer.vue";
 
@@ -28,18 +28,18 @@ export default {
     Navbar,
     Footer,
     SurveySidebarComponent,
-    SelectedForms
+    SelectedStages
     //ApplicantExperience
 
     //SurveyCreatorComponent
   },
   computed: {
-    form: {
+    stage: {
       get: function() {
-        return this.selectedForm;
+        return this.selectedStage;
       },
       set: function(newValue) {
-        this.selectedForm = newValue;
+        this.selectedStage = newValue;
       }
     },
     step: {
@@ -53,22 +53,21 @@ export default {
   },
   data() {
     return {
-      selectedForm: "getting-started",
+      selectedStage: "getting-started",
       selectedStep: "step1"
     };
   },
   methods: {
-    onLoadSurveyTitles(value) {
+    onLoadStepTitles(value) {
       console.log("Was '" + this.step + "'");
       this.step = value;
       console.log("Is now '" + this.step + "'");
       return value;
     },
     onSidebarClicked(value) {
-      console.log("Was '" + this.form + "'");
-      this.form = value;
-      console.log("Is now '" + this.form + "'");
-
+      console.log("Was '" + this.stage + "'");
+      this.stage = value;
+      console.log("Is now '" + this.stage + "'");
       return value;
     }
   }
