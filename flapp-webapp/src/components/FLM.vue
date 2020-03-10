@@ -25,10 +25,10 @@ export default {
   name: "FLMstage",
   data() {
     var survey = new SurveyVue.Model(surveyPrimaryJSON);
-    console.log(survey.title);
-    console.log(survey.PageCount);
-    console.log(survey.pages[0].title);
-    console.log(survey.pages[1].title);
+    // console.log(survey.title);
+    // console.log(survey.PageCount);
+    // console.log(survey.pages[0].title);
+    // console.log(survey.pages[1].title);
     //console.log("surveyPrimaryJSON = " + JSON.stringify(surveyPrimaryJSON, null, 3));
     return {
       survey: survey,

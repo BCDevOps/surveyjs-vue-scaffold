@@ -5,10 +5,15 @@
       <SurveySidebarComponent
         v-bind:selectedStage="selectedStage"
         v-bind:selectedStep="selectedStep"
+        v-bind:fpoStageDetails="fpoStageDetails"
         v-on:updated-stage="onSidebarClicked"
         v-on:updated-step="onLoadStepTitles"
       />
-      <SelectedStages v-bind:stage="selectedStage" />
+      <SelectedStages
+        v-bind:stage="selectedStage"
+        v-on:updated-fpo-stage-details="onUpdateFPOStageDetails"
+      />
+      <!--SelectedSteps v-bind:step="selectedStep" /-->
       <!--SurveyCreatorComponent /-->
     </main>
     <Footer id="footer" />
@@ -49,25 +54,42 @@ export default {
       set: function(newValue) {
         this.selectedStep = newValue;
       }
+    },
+    fpoStageDetails: {
+      get: function() {
+        return this.currentFPOStageDetails;
+      },
+      set: function(newValue) {
+        this.currentFPOStageDetails = newValue;
+      }
     }
   },
   data() {
     return {
       selectedStage: "getting-started",
-      selectedStep: "step1"
+      selectedStep: "",
+      currentFPOStageDetails: {}
     };
   },
   methods: {
     onLoadStepTitles(value) {
-      console.log("Was '" + this.step + "'");
+      console.log("this.step was '" + this.step + "'");
       this.step = value;
-      console.log("Is now '" + this.step + "'");
+      console.log("this.step is now '" + this.step + "'");
       return value;
     },
     onSidebarClicked(value) {
       console.log("Was '" + this.stage + "'");
       this.stage = value;
       console.log("Is now '" + this.stage + "'");
+      return value;
+    },
+    onUpdateFPOStageDetails: function(value) {
+      console.log(
+        "In SurveyControl.  New FPO stage = '" + JSON.stringify(value) + "'"
+      );
+
+      this.fpoStageDetails = value;
       return value;
     }
   }

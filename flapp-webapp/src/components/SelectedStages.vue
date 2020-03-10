@@ -2,14 +2,17 @@
   <div class="fill-height-lg" id="selectedstages">
     <b-container class="fill-body">
       <!--div id="surveyResult"></div-->
-      <GettingStarted v-if="stage === 'getting-started'" />
-      <ApplicantInfo v-else-if="stage === 'applicant-information'" />
-      <FPO v-else-if="stage === 'fpo'" />
-      <FLM v-else-if="stage === 'flm'" />
-      <ChildRelocation v-else-if="stage === 'child-relocation'" />
-      <Parenting v-else-if="stage === 'parenting'" />
-      <CaseMgmt v-else-if="stage === 'case-mgmt'" />
-      <Enforcement v-else-if="stage === 'enforcement'" />
+      <GettingStarted v-show="stage === 'getting-started'" />
+      <ApplicantInfo v-show="stage === 'applicant-information'" />
+      <FPO
+        v-show="stage === 'fpo'"
+        v-on:updated-fpo-stage-details="onUpdateFPOStageDetails"
+      />
+      <FLM v-show="stage === 'flm'" />
+      <ChildRelocation v-show="stage === 'child-relocation'" />
+      <Parenting v-show="stage === 'parenting'" />
+      <CaseMgmt v-show="stage === 'case-mgmt'" />
+      <Enforcement v-show="stage === 'enforcement'" />
     </b-container>
   </div>
 </template>
@@ -47,8 +50,18 @@ export default {
     CaseMgmt,
     Enforcement
   },
+  methods: {
+    onUpdateFPOStageDetails: function(value) {
+      console.log(
+        "In SelectedStages.  New FPO stage = '" + JSON.stringify(value) + "'"
+      );
+      this.$emit("updated-fpo-stage-details", value);
+      return value;
+    }
+  },
   props: {
-    stage: String
+    stage: String,
+    step: String
   }
 };
 </script>

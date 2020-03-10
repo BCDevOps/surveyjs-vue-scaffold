@@ -25,27 +25,21 @@
         </li>
         <li tabindex="0" id="fpo" v-on:click="onSelectStage($event)">
           <div class="link-icon">3</div>
-          <div class="link-label">FPO Form</div>
-          <div id="fpo-group" style="display: none">
+          <div class="link-label">{{ fpoStageDetails.title }}</div>
+          <div v-bind:id="fpoStageDetails.id" style="display: none">
             <ul class="links">
               <li
                 tabindex="1"
-                class="link-label"
-                id="step1"
-                v-on:click="onSelectStep($event)"
-              ></li>
-              <li
-                tabindex="1"
-                class="link-label"
-                id="step2"
-                v-on:click="onSelectStep($event)"
-              ></li>
-
-              <li tabindex="1">
-                <div class="link-label">Your (ex-)Partner's Info</div>
-              </li>
-              <li tabindex="1">
-                <div class="link-label">Your Children's Information</div>
+                v-for="step in fpoStageDetails.steps"
+                v-bind:key="step.step_index"
+              >
+                <div
+                  class="link-label"
+                  v-bind:id="step.step_id"
+                  v-on:click="onSelectStep($event)"
+                >
+                  {{ step.title }}
+                </div>
               </li>
             </ul>
           </div>
@@ -112,23 +106,48 @@ export default {
         }
       }
 
-      //console.log("updated-selection id :" + event.currentTarget.id);
-      //console.log("updated-selection value :" + event.currentTarget.value);
+      console.log("updated-selection id :" + event.currentTarget.id);
+      console.log("updated-selection value :" + event.currentTarget.value);
 
       this.$emit("updated-stage", event.currentTarget.id);
     },
     //TODO: This is where the step is selected
     onSelectStep: function(event) {
-      var fpo_group = document.getElementById("step1");
-      console.log("clicked on step 1/2 : " + step1);
-      var prev = document.getElementById(this.selectedStep);
+      // var step1 = document.getElementById("fpo-group");
+      //console.log("step1 is " + step1);
+      console.log("this.selectedStep is " + this.selectedStep);
+      var prevStep = document.getElementById(this.selectedStep);
+      console.log("prev step is " + prevStep);
+      var currStep = event.currentTarget;
+      console.log("curr step is " + currStep);
+
+      if (prevStep == currStep) {
+        // same choice; do nothing
+      } else {
+        currStep.classList.add("current");
+
+        if (prevStep !== null) {
+          prevStep.classList.remove("current");
+        }
+      }
 
       this.$emit("updated-step", event.currentTarget.id);
+    },
+    isFPOStageDetailsDefined: function() {
+      var flag =
+        typeof this.fpoStageDetails.stages !== "undefined" &&
+        this.fpoStageDetails.stages !== null;
+
+      console.log("isFPOStageDetailsDefined: " + flag);
+
+      flag = false;
+      return flag;
     }
   },
   props: {
     selectedStage: String,
-    selectedStep: String
+    selectedStep: String,
+    fpoStageDetails: Object
   }
 };
 </script>

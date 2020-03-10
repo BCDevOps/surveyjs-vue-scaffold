@@ -13,7 +13,7 @@
 
 <script>
 import * as SurveyVue from "survey-vue";
-import surveyPrimaryJSON from "../assets/survey-information.json";
+import surveyPrimaryJSON from "../assets/survey-primary.json";
 import { addQuestionTypes } from "./question-types.ts";
 
 SurveyVue.StylesManager.applyTheme("bcgov");
@@ -28,25 +28,49 @@ export default {
   name: "FPO",
   data() {
     var survey = new SurveyVue.Model(surveyPrimaryJSON);
-    console.log(survey.title);
-    console.log(survey.PageCount);
-    console.log(survey.pages[0].title);
-    console.log(survey.pages[1].title);
+    // console.log(survey.title);
+    // console.log(survey.PageCount);
+    // console.log(survey.pages[0].title);
+    // console.log(survey.pages[1].title);
+    var step_index = 0;
+    // for (page in survey.pages) {
+    //   page_title = survey.pages[page].title;
+    //   console.log(page_title);
+    // }
     //console.log("surveyPrimaryJSON = " + JSON.stringify(surveyPrimaryJSON, null, 3));
     console.log(survey);
     survey.completeText = "Next";
     return {
       survey: survey,
       stage: {
-        title: "",
+        title: survey.title,
+        id: "fpo-group",
         steps: [
           {
-            title: "",
-            step_index: ""
+            title: survey.pages[0].title,
+            step_index: 0,
+            step_id: "fpo-group-0"
+          },
+          {
+            title: survey.pages[1].title,
+            step_index: 1,
+            step_id: "fpo-group-1"
+          },
+          {
+            title: "FPO's third step",
+            step_index: 2,
+            step_id: "fpo-group-2"
           }
         ]
       }
     };
+  },
+  created() {
+    this.$emit("updated-fpo-stage-details", this.stage);
+  },
+  methods: {},
+  props: {
+    step: String
   }
 };
 </script>
