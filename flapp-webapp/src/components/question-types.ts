@@ -63,7 +63,11 @@ function fixCheckboxes(Survey: any) {
           const target = <HTMLInputElement>event.target;
           if (question.getType() === "matrix") {
             if (target.checked) {
-              question.generatedVisibleRows.forEach(function(row: any, index: any, rows: any) {
+              question.generatedVisibleRows.forEach(function(
+                row: any,
+                index: any,
+                rows: any
+              ) {
                 if (row.fullName === target.name) {
                   row.value = target.value;
                 }
@@ -97,7 +101,11 @@ function fixCheckboxes(Survey: any) {
             inputElts[i].checked = values.indexOf(inputElts[i].value) >= 0;
           }
         } else {
-          question.generatedVisibleRows.forEach(function(row: any, index: any, rows: any) {
+          question.generatedVisibleRows.forEach(function(
+            row: any,
+            index: any,
+            rows: any
+          ) {
             if (row.value) {
               const inputElts = el.getElementsByTagName("input");
               for (let i = 0; i < inputElts.length; i++) {
@@ -121,7 +129,7 @@ function fixCheckboxes(Survey: any) {
 
 function initHelpText(Survey: any) {
   const widget = {
-    name: "helptext",
+    name: "HelpText",
     title: "Expanding FAQ",
     iconName: "icon-panel",
     widgetIsLoaded: function() {
@@ -137,79 +145,7 @@ function initHelpText(Survey: any) {
           name: "body:text"
         }
       ]);
-    },
-    htmlTemplate: "<div></div>",
-    afterRender: function(question: any, el: any) {
-      while (el.childNodes.length) el.removeChild(el.childNodes[0]);
-
-      const outer = document.createElement("div");
-      let outerCls = "panel panel-default survey-expander ";
-      if (question.messageStyle === "box") outerCls += "survey-helptext";
-      else outerCls += "survey-inlinetext";
-      outer.className = outerCls;
-      const header = document.createElement("div");
-      header.className = "panel-heading";
-      const lbl = document.createElement("label");
-      lbl.className = "panel-title";
-      lbl.tabIndex = 0;
-      lbl.addEventListener("keydown", event => {
-        // let target = <HTMLInputElement>event.target;
-        if (event.keyCode === 32) {
-          // space
-          question.value = !question.value;
-        }
-      });
-      const chk = document.createElement("input");
-      chk.type = "checkbox";
-      chk.checked = !!question.value;
-      chk.style.visibility = "hidden";
-      chk.style.width = "0px";
-      chk.addEventListener("click", event => {
-        const target = <HTMLInputElement>event.target;
-        question.value = target.checked;
-      });
-
-      const icon = document.createElement("span");
-      icon.className = "heading-icon fa fa-question-circle";
-      const title = document.createElement("span");
-      title.className = "title-text";
-
-      const expander = document.createElement("span");
-      expander.className = "heading-expand fa fa-chevron-down";
-      lbl.appendChild(chk);
-      lbl.appendChild(icon);
-      lbl.appendChild(title);
-      lbl.appendChild(expander);
-      header.appendChild(lbl);
-      outer.appendChild(header);
-
-      const body = document.createElement("div");
-      body.className = "panel-body";
-      outer.appendChild(body);
-      el.appendChild(outer);
-
-      const updateContent = () => {
-        const titleContent = question.fullTitle;
-        title.innerHTML = titleContent;
-
-        const bodyContent = question.body || "";
-        const bodyHtml = question.getMarkdownHtml(bodyContent);
-        if (bodyHtml !== null)
-          body.innerHTML = question.getProcessedHtml(bodyHtml);
-        else body.innerText = question.getProcessedHtml(bodyContent);
-      };
-      question.titleChangedCallback = updateContent;
-      updateContent();
-
-      question.valueChangedCallback = function() {
-        outer.className = outerCls + (question.value ? " expanded" : "");
-        expander.className =
-          "heading-expand " +
-          (question.value ? "fa fa-chevron-up" : "fa fa-chevron-down");
-      };
-      question.valueChangedCallback();
-    },
-    willUnmount: function(question: any, el: any) {}
+    }
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
@@ -322,7 +258,7 @@ function initInfoText(Survey: any) {
 
 function initYesNo(Survey: any) {
   const widget = {
-    name: "yesno",
+    name: "YesNo",
     title: "Yes/No",
     iconName: "icon-radiogroup",
     isDefaultRender: true,
@@ -334,61 +270,7 @@ function initYesNo(Survey: any) {
     },
     activatedByChanged: function(activatedBy: any) {
       Survey.JsonObject.metaData.addClass("yesno", [], null, "empty");
-    },
-    htmlTemplate: "<div></div>",
-    makeButton: function(question: any, opt: any) {
-      const chk = document.createElement("input");
-      chk.type = "radio";
-      chk.name = question.name + "_" + question.id;
-      chk.value = opt.value;
-      chk.checked = question.value === opt.value;
-      chk.onclick = function() {
-        if ((<HTMLInputElement>this).checked) question.value = opt.value;
-      };
-      opt.input = chk;
-      const outer = document.createElement("label");
-      outer.className = "survey-yesno";
-      outer.appendChild(chk);
-      const div = document.createElement("span");
-      div.className = "survey-yesno-button";
-      div.appendChild(document.createTextNode(opt.label));
-      div.tabIndex = 0;
-      div.setAttribute("role", "button");
-      if (opt.value === "y") div.id = question.inputId; // allow auto focus
-      div.onkeypress = function(evt) {
-        if (evt.keyCode === 32) {
-          chk.checked = true;
-          question.value = opt.value;
-          evt.preventDefault();
-        }
-      };
-      outer.appendChild(div);
-      opt.button = outer;
-      return outer;
-    },
-    afterRender: function(question: any, el: any) {
-      while (el.childNodes.length) el.removeChild(el.childNodes[0]);
-
-      const choices = [
-        { label: "Yes", value: "y", button: null, input: null },
-        { label: "No", value: "n", button: null, input: null }
-      ];
-      for (const opt of choices) {
-        const btn = this.makeButton(question, opt);
-        el.appendChild(opt.button);
-      }
-      question.valueChangedCallback = function() {
-        let opt: any = [];
-        for (opt of choices) {
-          if (opt.value === question.value) opt.input.checked = true;
-        }
-      };
-      // This probably shouldn't be necessary, but the question is sometimes rendered with no value
-      if (question.value === undefined) {
-        setTimeout(question.valueChangedCallback, 50);
-      }
-    },
-    willUnmount: function(question: any, el: any) {}
+    }
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
@@ -716,9 +598,9 @@ function initAddressBlock(Survey: any) {
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
-function initNameBlock(Survey: any) {
+function initPersonName(Survey: any) {
   const widget = {
-    name: "personname",
+    name: "PersonName",
     title: "Person Name",
     iconName: "icon-multipletext",
     widgetIsLoaded: function() {
@@ -765,167 +647,7 @@ function initNameBlock(Survey: any) {
           .filter(p => p)
           .join(" ");
       return question.defaultSubstitution;
-    },
-    htmlTemplate: "<div></div>",
-    afterRender: function(question: any, el: any) {
-      while (el.childNodes.length) el.removeChild(el.childNodes[0]);
-
-      const outer = document.createElement("div");
-      const outerCls = "survey-personname";
-      let label;
-      let sublbl;
-      let descId;
-      let row;
-      let cell;
-      let input;
-      let acceptLbl: any;
-      let acceptRow : any;
-      // let acceptBtn;
-      // let cancelBtn;
-      outer.className = outerCls;
-
-      row = document.createElement("div");
-      row.className = "row";
-
-      const fields = [
-        { name: "first", label: "First Name", input: null },
-        { name: "middle", label: "Middle Name(s)", input: null },
-        { name: "last", label: "Last Name", input: null }
-      ];
-      if (question.labelFirstName) {
-        fields[0].label = question.labelFirstName;
-      }
-      if (question.labelMiddleName) {
-        fields[1].label = question.labelMiddleName;
-      }
-      if (question.labelLastName) {
-        fields[2].label = question.labelLastName;
-      }
-      let curVal: any;
-      const checkAccept = function() {
-        let visib = false;
-        const qVal = question.value || {};
-        if (curVal) {
-          for (const field of fields) {
-            if (qVal[field.name] !== curVal[field.name]) {
-              visib = true;
-              break;
-            }
-          }
-        }
-        if (acceptRow) acceptRow.style.display = visib ? "block" : "none";
-        if (acceptLbl)
-          acceptLbl.innerText = question.value ? "Update Name" : "Continue";
-      };
-      let focused = false;
-      let acceptTimeout: any = null;
-      const acceptValue = function(evt?: any) {
-        question.value = curVal;
-      };
-      let updated = false;
-      const updateValue = function(evt: any) {
-        if (acceptTimeout) {
-          clearTimeout(acceptTimeout);
-          acceptTimeout = null;
-        }
-        let empty = true;
-        curVal = {};
-        let field: any = {};
-        for (field of fields) {
-          curVal[field.name] = field.input.value.trim();
-          if (curVal[field.name].length) empty = false;
-        }
-        if (empty) curVal = null;
-        // checkAccept();
-        if (question.value) updated = true;
-        acceptValue();
-      };
-      const updateFocus = function(evt: any) {
-        focused = evt.type === "focus";
-        if (acceptTimeout) {
-          clearTimeout(acceptTimeout);
-          acceptTimeout = null;
-        }
-        // if(! focused && updated) {
-        //   acceptTimeout = setTimeout(acceptValue, 1000);
-        // }
-      };
-      let field: any = {};
-      for (field of fields) {
-        cell = document.createElement("div");
-        cell.className = "col-sm-4";
-        label = document.createElement("label");
-        label.className = "survey-sublabel";
-        label.appendChild(document.createTextNode(field.label));
-        cell.appendChild(label);
-        input = document.createElement("input");
-        input.className = "form-control";
-        if (field.name === "first") input.id = question.inputId;
-        // allow auto focus
-        else input.id = question.inputId + "-" + field.name;
-        input.addEventListener("change", updateValue);
-        input.addEventListener("input", updateValue);
-        input.addEventListener("focus", updateFocus);
-        input.addEventListener("blur", updateFocus);
-        label.setAttribute("for", input.id);
-        field.input = input;
-        cell.appendChild(input);
-        descId =
-          "desc" +
-          field.name[0].toUpperCase() +
-          field.name.substring(1) +
-          "Name";
-        if (question[descId]) {
-          sublbl = document.createElement("p");
-          sublbl.className = "survey-desc small";
-          sublbl.appendChild(document.createTextNode(question[descId]));
-          cell.appendChild(sublbl);
-        }
-        row.appendChild(cell);
-      }
-
-      outer.appendChild(row);
-
-      /*acceptRow = document.createElement('div');
-      acceptRow.style.display = 'none';
-      acceptRow.className = 'row accept-row';
-      cell = document.createElement('div');
-      cell.className = 'col-sm-12'*/
-      /*cancelBtn = document.createElement('button');
-      cancelBtn.className = 'btn btn-primary';
-      cancelBtn.appendChild(document.createTextNode('Cancel'));
-      cell.appendChild(cancelBtn);
-      cell.appendChild(document.createTextNode(' '));
-      cancelBtn.onclick = function() {
-        question.valueChangedCallback();
-        updateValue();
-      }*/
-      /*acceptBtn = document.createElement('button');
-      acceptBtn.className = 'btn btn-primary';
-      acceptLbl = document.createElement('span');
-      acceptBtn.appendChild(acceptLbl);
-      acceptBtn.addEventListener('click', acceptValue);
-      cell.appendChild(acceptBtn);
-      acceptRow.appendChild(cell);
-      outer.appendChild(acceptRow);*/
-
-      el.appendChild(outer);
-
-      question.valueChangedCallback = () => {
-        const val = question.value || {};
-        let field: any = {};
-        for (field of fields) {
-          field.input.value = val[field.name] || "";
-        }
-        checkAccept();
-      };
-      question.valueChangedCallback();
-      // This probably shouldn't be necessary, but the question is sometimes rendered with no value
-      if (question.value === undefined) {
-        setTimeout(question.valueChangedCallback, 50);
-      }
-    },
-    willUnmount: function(question: any, el: any) {}
+    }
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
@@ -1241,7 +963,7 @@ export function addQuestionTypes(Survey: any) {
   initYesNo(Survey);
   initInfoText(Survey);
   initHelpText(Survey);
-  initNameBlock(Survey);
+  initPersonName(Survey);
   initAddressBlock(Survey);
   initContactInfoBlock(Survey);
   initCustomDate(Survey);
