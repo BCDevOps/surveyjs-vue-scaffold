@@ -1,7 +1,7 @@
 <template>
   <!-- https://www.w3schools.com/howto/howto_css_sidebar_responsive.asp -->
   <div class="sidebar-left" id="sidebar-left">
-    <div class="sidebar-container" id="SurveySidebarComponent">
+    <div class="sidebar-container" id="sidebar">
       <div class="sidebar-title">
         <h3>Application Steps</h3>
       </div>
@@ -10,27 +10,29 @@
           tabindex="0"
           class="current"
           id="getting-started"
-          v-on:click="onSelectStage($event)"
+          v-on:click="onSelectSurvey($event)"
         >
           <div class="link-icon">1</div>
           <div class="link-label">Getting Started</div>
         </li>
-        <li
+        <!-- <li
           tabindex="0"
           id="applicant-information"
-          v-on:click="onSelectStage($event)"
+          v-on:click="onSelectSurvey($event)"
         >
           <div class="link-icon">2</div>
           <div class="link-label">Applicant information</div>
-        </li>
-        <li tabindex="0" id="fpo" v-on:click="onSelectStage($event)">
+        </li> -->
+        <li tabindex="0" id="surveyfpo" v-on:click="onSelectSurvey($event)">
           <div class="link-icon">3</div>
-          <div class="link-label">{{ fpoStageDetails.title }}</div>
-          <div v-bind:id="fpoStageDetails.id" style="display: none">
+          <div class="link-label">
+            {{ surveyFpoDetails.title }}
+          </div>
+          <div v-bind:id="surveyFpoDetails.id" style="display: none">
             <ul class="links">
               <li
                 tabindex="1"
-                v-for="step in fpoStageDetails.steps"
+                v-for="step in surveyFpoDetails.steps"
                 v-bind:key="step.step_index"
               >
                 <div
@@ -44,30 +46,30 @@
             </ul>
           </div>
         </li>
-        <li tabindex="0" id="flm" v-on:click="onSelectStage($event)">
+        <!-- <li tabindex="0" id="flm" v-on:click="onSelectSurvey($event)">
           <div class="link-icon">4</div>
           <div class="link-label">FLM</div>
-        </li>
-        <li
+        </li> -->
+        <!-- <li
           tabindex="0"
           id="child-relocation"
-          v-on:click="onSelectStage($event)"
-        >
-          <div class="link-icon">5</div>
+          v-on:click="onSelectSurvey($event)"
+        > -->
+        <!-- <div class="link-icon">5</div>
           <div class="link-label">Child Relocation</div>
-        </li>
-        <li tabindex="0" id="parenting" v-on:click="onSelectStage($event)">
+        </li> -->
+        <!-- <li tabindex="0" id="parenting" v-on:click="onSelectSurvey($event)">
           <div class="link-icon">6</div>
           <div class="link-label">Parenting</div>
-        </li>
-        <li tabindex="0" id="case-mgmt" v-on:click="onSelectStage($event)">
+        </li> -->
+        <!-- <li tabindex="0" id="case-mgmt" v-on:click="onSelectSurvey($event)">
           <div class="link-icon">7</div>
           <div class="link-label">Case Management</div>
-        </li>
-        <li tabindex="0" id="enforcement" v-on:click="onSelectStage($event)">
+        </li> -->
+        <!-- <li tabindex="0" id="enforcement" v-on:click="onSelectSurvey($event)">
           <div class="link-icon">8</div>
           <div class="link-label">Enforcement</div>
-        </li>
+        </li> -->
         <li class="separate" />
         <li tabindex="-1" id="print" class="disabled">
           <div class="link-icon">9</div>
@@ -82,15 +84,15 @@
 import * as SurveyVue from "survey-vue";
 
 export default {
-  name: "SurveySidebarComponent",
+  name: "Sidebar",
   data() {
     return {};
   },
   methods: {
-    onSelectStage: function(event) {
-      var fpo = document.getElementById("fpo");
+    onSelectSurvey: function(event) {
+      var fpo = document.getElementById("surveyfpo");
       var fpo_group = document.getElementById("fpo-group");
-      var prev = document.getElementById(this.selectedStage);
+      var prev = document.getElementById(this.selectedSurvey);
       var curr = event.currentTarget;
 
       if (prev == curr) {
@@ -133,40 +135,33 @@ export default {
 
       this.$emit("updated-step", event.currentTarget.id);
     },
-    isFPOStageDetailsDefined: function() {
+    isSurveyFpoDetailsDefined: function() {
       var flag =
-        typeof this.fpoStageDetails.stages !== "undefined" &&
-        this.fpoStageDetails.stages !== null;
+        typeof this.surveyFpoDetails.stages !== "undefined" &&
+        this.surveyFpoDetails.stages !== null;
 
-      console.log("isFPOStageDetailsDefined: " + flag);
+      console.log("isSurveyFpoDetailsDefined: " + flag);
 
       flag = false;
       return flag;
     }
   },
   props: {
-    selectedStage: String,
+    selectedSurvey: String,
     selectedStep: String,
-    fpoStageDetails: Object
+    surveyFpoDetails: Object
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 60px 60px 60px;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 100px 100px;
-}
-a {
-  color: #100000;
+@import "../styles/common";
+
+/* Active/current link */
+.sidebar a.active {
+  background-color: #fcba19;
+  color: white;
 }
 
 /* The side navigation menu */
@@ -187,13 +182,6 @@ a {
   padding: 16px;
   text-decoration: none;
 }
-
-/* Active/current link */
-.sidebar a.active {
-  background-color: #fcba19;
-  color: white;
-}
-
 /* Links on mouse-over */
 .sidebar a:hover:not(.active) {
   background-color: #555;
@@ -247,11 +235,6 @@ div.content {
   position: absolute;
   top: 0;
   width: $sidebar-width-md;
-}
-@include media-breakpoint-up(lg) {
-  .sidebar-container {
-    width: $sidebar-width-lg;
-  }
 }
 
 // sidebar title
