@@ -1,5 +1,5 @@
 <template>
-  <div class=" fill-body" id="SurveyControl">
+  <div class=" fill-body" id="flappsurveys">
     <NavigationTopbar />
     <main class="app-content fill-body">
       <NavigationSidebar
@@ -9,7 +9,7 @@
         v-on:updated-survey="onSidebarClicked"
         v-on:updated-page="onLoadPageTitles"
       />
-      <SelectedSurveys
+      <SurveySelector
         v-bind:survey="selectedSurvey"
         v-on:updated-survey-fpo-details="onUpdateSurveyFpoDetails"
       />
@@ -23,17 +23,17 @@
 <script>
 import NavigationTopbar from "./NavigationTopbar.vue";
 import NavigationSidebar from "./NavigationSidebar.vue";
-import SelectedSurveys from "./SelectedSurveys.vue";
+import SurveySelector from "./SurveySelector.vue";
 //import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
 import NavigationFooter from "./NavigationFooter.vue";
 
 export default {
-  name: "SurveyControl",
+  name: "FlappSurveys",
   components: {
     NavigationTopbar,
     NavigationFooter,
     NavigationSidebar,
-    SelectedSurveys
+    SurveySelector
     //ApplicantExperience
 
     //SurveyCreatorComponent
@@ -86,7 +86,7 @@ export default {
     },
     onUpdateSurveyFpoDetails: function(value) {
       console.log(
-        "In SurveyControl.  New FPO survey = '" + JSON.stringify(value) + "'"
+        "In FlappSurveys .  New FPO survey = '" + JSON.stringify(value) + "'"
       );
 
       this.surveyFpoDetails = value;

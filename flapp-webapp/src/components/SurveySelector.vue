@@ -1,10 +1,14 @@
 <template>
-  <div class="fill-height-lg" id="selectedsurveys">
+  <div class="fill-height-lg" id="surveyselector">
     <b-container class="fill-body">
       <!--div id="surveyResult"></div-->
       <GettingStarted v-show="survey === 'getting-started'" />
       <!--<ApplicantInfo v-show="survey === 'applicant-information'" /> -->
-      <SurveyFPO
+      <!-- <SurveyFPO
+        v-show="survey === 'surveyfpo'"
+        v-on:updated-survey-fpo-details="onUpdateSurveyFpoDetails"
+      /> -->
+      <SurveyComponent
         v-show="survey === 'surveyfpo'"
         v-on:updated-survey-fpo-details="onUpdateSurveyFpoDetails"
       />
@@ -22,6 +26,7 @@ import * as SurveyVue from "survey-vue";
 import GettingStarted from "./GettingStarted";
 //import ApplicantInfo from "./ApplicantInfo.vue";
 import SurveyFPO from "./SurveyFPO.vue";
+import SurveyComponent from "./SurveyComponent.vue";
 //import FLM from "./FLM";
 //import ChildRelocation from "./ChildRelocation";
 //import FormParenting from "./FormParenting.vue";
@@ -36,14 +41,15 @@ SurveyVue.StylesManager.applyTheme("bcgov");
 }); */
 
 export default {
-  name: "SelectedSurveys",
+  name: "SurveySelector",
   data() {
     return {};
   },
   components: {
     GettingStarted,
     //ApplicantInfo,
-    SurveyFPO
+    SurveyFPO,
+    SurveyComponent
     //FLM,
     //ChildRelocation,
     //FormParenting,
@@ -53,7 +59,7 @@ export default {
   methods: {
     onUpdateSurveyFpoDetails: function(value) {
       console.log(
-        "In SelectedSurveys.  New FPO survey = '" + JSON.stringify(value) + "'"
+        "In SurveySelector.  New FPO survey = '" + JSON.stringify(value) + "'"
       );
       this.$emit("updated-survey-fpo-details", value);
       return value;

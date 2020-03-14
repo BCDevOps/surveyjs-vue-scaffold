@@ -1,16 +1,16 @@
 <template>
   <div class="app-outer fill-body" id="app">
-    <SurveyControl></SurveyControl>
+    <FlappSurveys></FlappSurveys>
   </div>
 </template>
 
 <script>
-import SurveyControl from "./components/SurveyControl.vue";
+import FlappSurveys from "./components/FlappSurveys.vue";
 
 export default {
   name: "app",
   components: {
-    SurveyControl
+    FlappSurveys
   },
 
   data() {
