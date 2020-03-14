@@ -4,16 +4,16 @@
     <main class="app-content fill-body">
       <NavigationSidebar
         v-bind:selectedSurvey="selectedSurvey"
-        v-bind:selectedStep="selectedStep"
+        v-bind:selectedPage="selectedPage"
         v-bind:surveyFpoDetails="surveyFpoDetails"
-        v-on:updated-stage="onSidebarClicked"
-        v-on:updated-step="onLoadStepTitles"
+        v-on:updated-survey="onSidebarClicked"
+        v-on:updated-page="onLoadPageTitles"
       />
       <SelectedSurveys
-        v-bind:stage="selectedSurvey"
+        v-bind:survey="selectedSurvey"
         v-on:updated-survey-fpo-details="onUpdateSurveyFpoDetails"
       />
-      <!--SelectedSteps v-bind:step="selectedStep" /-->
+
       <!--SurveyCreatorComponent /-->
     </main>
     <NavigationFooter id="footer" />
@@ -39,7 +39,7 @@ export default {
     //SurveyCreatorComponent
   },
   computed: {
-    stage: {
+    survey: {
       get: function() {
         return this.selectedSurvey;
       },
@@ -47,12 +47,12 @@ export default {
         this.selectedSurvey = newValue;
       }
     },
-    step: {
+    page: {
       get: function() {
-        return this.selectedStep;
+        return this.selectedPage;
       },
       set: function(newValue) {
-        this.selectedStep = newValue;
+        this.selectedPage = newValue;
       }
     },
     surveyFpoDetails: {
@@ -67,26 +67,26 @@ export default {
   data() {
     return {
       selectedSurvey: "getting-started",
-      selectedStep: "",
+      selectedPage: "",
       currentSurveyFpoDetails: {}
     };
   },
   methods: {
-    onLoadStepTitles(value) {
-      console.log("this.step was '" + this.step + "'");
-      this.step = value;
-      console.log("this.step is now '" + this.step + "'");
+    onLoadPageTitles(value) {
+      console.log("this.page was '" + this.page + "'");
+      this.page = value;
+      console.log("this.page is now '" + this.page + "'");
       return value;
     },
     onSidebarClicked(value) {
-      console.log("Was '" + this.stage + "'");
-      this.stage = value;
-      console.log("Is now '" + this.stage + "'");
+      console.log("Was '" + this.survey + "'");
+      this.survey = value;
+      console.log("Is now '" + this.survey + "'");
       return value;
     },
     onUpdateSurveyFpoDetails: function(value) {
       console.log(
-        "In SurveyControl.  New FPO stage = '" + JSON.stringify(value) + "'"
+        "In SurveyControl.  New FPO survey = '" + JSON.stringify(value) + "'"
       );
 
       this.surveyFpoDetails = value;

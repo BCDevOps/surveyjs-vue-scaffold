@@ -32,45 +32,45 @@ export default {
     // console.log(survey.PageCount);
     // console.log(survey.pages[0].title);
     // console.log(survey.pages[1].title);
-    var step_index = 0;
+    var page_index = 0;
     // for (page in survey.pages) {
     //   page_title = survey.pages[page].title;
     //   console.log(page_title);
     // }
     //console.log("surveyPrimaryJSON = " + JSON.stringify(surveyPrimaryJSON, null, 3));
-    console.log(survey);
+    console.log("survey = " + survey);
     survey.completeText = "Next";
     return {
       survey: survey,
-      stage: {
+      survey1: {
         title: survey.title,
         id: "fpo-group",
-        steps: [
+        pages: [
           {
             title: survey.pages[0].title,
-            step_index: 0,
-            step_id: "fpo-group-0"
+            page_index: 0,
+            page_id: "fpo-group-0"
           },
           {
             title: survey.pages[1].title,
-            step_index: 1,
-            step_id: "fpo-group-1"
+            page_index: 1,
+            page_id: "fpo-group-1"
           },
           {
-            title: "FPO's third step",
-            step_index: 2,
-            step_id: "fpo-group-2"
+            title: "FPO's third page",
+            page_index: 2,
+            page_id: "fpo-group-2"
           }
         ]
       }
     };
   },
   created() {
-    this.$emit("updated-survey-fpo-details", this.stage);
+    this.$emit("updated-survey-fpo-details", this.survey1);
   },
   methods: {},
   props: {
-    step: String
+    page: String
   }
 };
 </script>

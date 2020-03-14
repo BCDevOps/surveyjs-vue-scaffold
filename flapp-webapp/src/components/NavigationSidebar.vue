@@ -32,15 +32,15 @@
             <ul class="links">
               <li
                 tabindex="1"
-                v-for="step in surveyFpoDetails.steps"
-                v-bind:key="step.step_index"
+                v-for="page in surveyFpoDetails.pages"
+                v-bind:key="page.page_index"
               >
                 <div
                   class="link-label"
-                  v-bind:id="step.step_id"
-                  v-on:click="onSelectStep($event)"
+                  v-bind:id="page.page_id"
+                  v-on:click="onSelectPage($event)"
                 >
-                  {{ step.title }}
+                  {{ page.title }}
                 </div>
               </li>
             </ul>
@@ -111,34 +111,34 @@ export default {
       console.log("updated-selection id :" + event.currentTarget.id);
       console.log("updated-selection value :" + event.currentTarget.value);
 
-      this.$emit("updated-stage", event.currentTarget.id);
+      this.$emit("updated-survey", event.currentTarget.id);
     },
     //TODO: This is where the step is selected
-    onSelectStep: function(event) {
+    onSelectPage: function(event) {
       // var step1 = document.getElementById("fpo-group");
-      //console.log("step1 is " + step1);
-      console.log("this.selectedStep is " + this.selectedStep);
-      var prevStep = document.getElementById(this.selectedStep);
-      console.log("prev step is " + prevStep);
-      var currStep = event.currentTarget;
-      console.log("curr step is " + currStep);
+      //console.log("page11 is " + page1);
+      console.log("this.selectedPage is " + this.selectedPage);
+      var prevPage = document.getElementById(this.selectedPage);
+      console.log("prev page is " + prevPage);
+      var currPage = event.currentTarget;
+      console.log("curr page is " + currPage);
 
-      if (prevStep == currStep) {
+      if (prevPage == currPage) {
         // same choice; do nothing
       } else {
-        currStep.classList.add("current");
+        currPage.classList.add("current");
 
-        if (prevStep !== null) {
-          prevStep.classList.remove("current");
+        if (prevPage !== null) {
+          prevPage.classList.remove("current");
         }
       }
 
-      this.$emit("updated-step", event.currentTarget.id);
+      this.$emit("updated-page", event.currentTarget.id);
     },
     isSurveyFpoDetailsDefined: function() {
       var flag =
-        typeof this.surveyFpoDetails.stages !== "undefined" &&
-        this.surveyFpoDetails.stages !== null;
+        typeof this.surveyFpoDetails.surveys !== "undefined" &&
+        this.surveyFpoDetails.surveys !== null;
 
       console.log("isSurveyFpoDetailsDefined: " + flag);
 
@@ -148,7 +148,7 @@ export default {
   },
   props: {
     selectedSurvey: String,
-    selectedStep: String,
+    selectedPage: String,
     surveyFpoDetails: Object
   }
 };

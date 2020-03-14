@@ -2,17 +2,17 @@
   <div class="fill-height-lg" id="selectedsurveys">
     <b-container class="fill-body">
       <!--div id="surveyResult"></div-->
-      <GettingStarted v-show="stage === 'getting-started'" />
-      <!--<ApplicantInfo v-show="stage === 'applicant-information'" /> -->
+      <GettingStarted v-show="survey === 'getting-started'" />
+      <!--<ApplicantInfo v-show="survey === 'applicant-information'" /> -->
       <SurveyFPO
-        v-show="stage === 'surveyfpo'"
+        v-show="survey === 'surveyfpo'"
         v-on:updated-survey-fpo-details="onUpdateSurveyFpoDetails"
       />
-      <!-- <FLM v-show="stage === 'flm'" />
-      <ChildRelocation v-show="stage === 'child-relocation'" />
-      <FormParenting v-show="stage === 'parenting'" />
-      <CaseMgmt v-show="stage === 'case-mgmt'" />
-      <Enforcement v-show="stage === 'enforcement'" /> -->
+      <!-- <FLM v-show="survey === 'flm'" />
+      <ChildRelocation v-show="survey === 'child-relocation'" />
+      <FormParenting v-show="survey === 'parenting'" />
+      <CaseMgmt v-show="survey === 'case-mgmt'" />
+      <Enforcement v-show="survey === 'enforcement'" /> -->
     </b-container>
   </div>
 </template>
@@ -53,15 +53,15 @@ export default {
   methods: {
     onUpdateSurveyFpoDetails: function(value) {
       console.log(
-        "In SelectedSurveys.  New FPO stage = '" + JSON.stringify(value) + "'"
+        "In SelectedSurveys.  New FPO survey = '" + JSON.stringify(value) + "'"
       );
       this.$emit("updated-survey-fpo-details", value);
       return value;
     }
   },
   props: {
-    stage: String,
-    step: String
+    survey: String,
+    page_title: String
   }
 };
 </script>

@@ -39,7 +39,8 @@ var surveyJSON = {
       ],
       title: "Select your forms"
     }
-  ]
+  ],
+  title: "Start Your Application"
 };
 
 /* survey.onComplete.add(function(result) {
