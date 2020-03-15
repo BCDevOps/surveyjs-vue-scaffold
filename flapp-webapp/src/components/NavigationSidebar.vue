@@ -1,7 +1,7 @@
 <template>
   <!-- https://www.w3schools.com/howto/howto_css_sidebar_responsive.asp -->
   <div class="sidebar-left" id="sidebar-left">
-    <div class="sidebar-container" id="SurveySidebarComponent">
+    <div class="sidebar-container" id="sidebar">
       <div class="sidebar-title">
         <h3>Application Steps</h3>
       </div>
@@ -10,60 +10,40 @@
           tabindex="0"
           class="current"
           id="getting-started"
-          v-on:click="onSelectStage($event)"
+          v-on:click="onSelectSurvey($event)"
         >
           <div class="link-icon">1</div>
           <div class="link-label">Getting Started</div>
         </li>
+
         <li
           tabindex="0"
-          id="applicant-information"
-          v-on:click="onSelectStage($event)"
+          v-bind:id="getSurveyId(1)"
+          v-on:click="onSelectSurvey($event)"
         >
-          <div class="link-icon">2</div>
-          <div class="link-label">Applicant information</div>
-        </li>
-        <li tabindex="0" id="fpo" v-on:click="onSelectStage($event)">
           <div class="link-icon">3</div>
-          <div class="link-label">FPO Form</div>
-          <div id="fpo-group" style="display: none">
+          <div class="link-label">
+            {{ surveyJSONs[1].surveyJSON.title }}
+          </div>
+          <div id="survey-fpo-group" style="display: none">
             <ul class="links">
-              <li tabindex="1">
-                <div class="link-label">Your Information</div>
-              </li>
-              <li tabindex="1">
-                <div class="link-label">Your (ex-)Partner's Info</div>
-              </li>
-              <li tabindex="1">
-                <div class="link-label">Your Children's Information</div>
+              <li
+                tabindex="1"
+                v-for="(page, index) in surveyJSONs[1].surveyJSON.pages"
+                v-bind:key="index"
+              >
+                <div
+                  class="link-label"
+                  v-bind:id="index"
+                  v-on:click="onSelectPage($event)"
+                >
+                  {{ page.title }}
+                </div>
               </li>
             </ul>
           </div>
         </li>
-        <li tabindex="0" id="flm" v-on:click="onSelectStage($event)">
-          <div class="link-icon">4</div>
-          <div class="link-label">FLM</div>
-        </li>
-        <li
-          tabindex="0"
-          id="child-relocation"
-          v-on:click="onSelectStage($event)"
-        >
-          <div class="link-icon">5</div>
-          <div class="link-label">Child Relocation</div>
-        </li>
-        <li tabindex="0" id="parenting" v-on:click="onSelectStage($event)">
-          <div class="link-icon">6</div>
-          <div class="link-label">Parenting</div>
-        </li>
-        <li tabindex="0" id="case-mgmt" v-on:click="onSelectStage($event)">
-          <div class="link-icon">7</div>
-          <div class="link-label">Case Management</div>
-        </li>
-        <li tabindex="0" id="enforcement" v-on:click="onSelectStage($event)">
-          <div class="link-icon">8</div>
-          <div class="link-label">Enforcement</div>
-        </li>
+
         <li class="separate" />
         <li tabindex="-1" id="print" class="disabled">
           <div class="link-icon">9</div>
@@ -78,15 +58,18 @@
 import * as SurveyVue from "survey-vue";
 
 export default {
-  name: "SurveySidebarComponent",
+  name: "NavigationSidebar",
   data() {
     return {};
   },
+  updated() {
+    console.log("In Navigationsidebar.created()" + surveyJSONs);
+  },
   methods: {
-    onSelectStage: function(event) {
-      var fpo = document.getElementById("fpo");
+    onSelectSurvey: function(event) {
+      var fpo = document.getElementById("surveyfpo");
       var fpo_group = document.getElementById("fpo-group");
-      var prev = document.getElementById(this.selectedForm);
+      var prev = document.getElementById(this.selectedSurvey);
       var curr = event.currentTarget;
 
       if (prev == curr) {
@@ -102,32 +85,64 @@ export default {
         }
       }
 
-      this.$emit("updated-selection", event.currentTarget.id);
+      console.log("updated-selection id :" + event.currentTarget.id);
+      console.log("updated-selection value :" + event.currentTarget.value);
+
+      this.$emit("updated-survey", event.currentTarget.id);
     },
-    //TODO: This is where the sub-step is selected
-    onSelectStep: function(event) {}
+    //TODO: This is where the step is selected
+    onSelectPage: function(event) {
+      // var step1 = document.getElementById("fpo-group");
+      //console.log("page11 is " + page1);
+      console.log("this.selectedPage is " + this.selectedPage);
+      var prevPage = document.getElementById(this.selectedPage);
+      console.log("prev page is " + prevPage);
+      var currPage = event.currentTarget;
+      console.log("curr page is " + currPage);
+
+      if (prevPage == currPage) {
+        // same choice; do nothing
+      } else {
+        currPage.classList.add("current");
+
+        if (prevPage !== null) {
+          prevPage.classList.remove("current");
+        }
+      }
+
+      this.$emit("updated-page", event.currentTarget.id);
+    },
+    isSurveyFpoDetailsDefined: function() {
+      var flag =
+        typeof this.surveyFpoDetails.surveys !== "undefined" &&
+        this.surveyFpoDetails.surveys !== null;
+
+      console.log("isSurveyFpoDetailsDefined: " + flag);
+
+      flag = false;
+      return flag;
+    },
+    getSurveyId: function(value) {
+      return "survey-" + value;
+    }
   },
   props: {
-    selectedForm: String
+    selectedSurvey: String,
+    selectedPage: String,
+    surveyFpoDetails: Object,
+    surveyJSONs: Array
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 60px 60px 60px;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 100px 100px;
-}
-a {
-  color: #100000;
+@import "../styles/common";
+
+/* Active/current link */
+.sidebar a.active {
+  background-color: #fcba19;
+  color: white;
 }
 
 /* The side navigation menu */
@@ -148,13 +163,6 @@ a {
   padding: 16px;
   text-decoration: none;
 }
-
-/* Active/current link */
-.sidebar a.active {
-  background-color: #fcba19;
-  color: white;
-}
-
 /* Links on mouse-over */
 .sidebar a:hover:not(.active) {
   background-color: #555;
@@ -208,11 +216,6 @@ div.content {
   position: absolute;
   top: 0;
   width: $sidebar-width-md;
-}
-@include media-breakpoint-up(lg) {
-  .sidebar-container {
-    width: $sidebar-width-lg;
-  }
 }
 
 // sidebar title

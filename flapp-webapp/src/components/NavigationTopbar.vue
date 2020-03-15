@@ -69,48 +69,13 @@
 <script>
 export default {
   data() {
-    return {
-      meal: ""
-    };
-  },
-  methods: {
-    getMeal() {}
+    return {};
   }
 };
 </script>
 
 <style scoped lang="scss">
-.app-outer {
-  display: flex;
-  flex-flow: column nowrap;
-  min-height: 100%;
-}
-
-.app-content {
-  display: flex;
-  flex: 1 0 auto;
-  flex-flow: row nowrap;
-  max-width: 100%;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.app-main {
-  flex: auto;
-  padding: 0 15px 80px;
-}
-
-.sidebar-left,
-.navbar-tag {
-  border: 1px solid #fff;
-  border-radius: 2px;
-  display: inline-block;
-  font-size: 60%;
-  line-height: 1;
-  margin-left: 0.5em;
-  padding: 0.25em 0.5em;
-  vertical-align: text-bottom;
-}
+@import "../styles/common";
 
 .app-exit + .navbar {
   padding-right: 170px;
@@ -135,15 +100,6 @@ export default {
 .navbar {
   .btn-primary {
     border-color: #ccc;
-  }
-}
-
-@include media-breakpoint-down(md) {
-  .navbar .navbar-text {
-    font-size: 1em;
-  }
-  .navbar .navbar-extra {
-    flex: 0 1 auto;
   }
 }
 
