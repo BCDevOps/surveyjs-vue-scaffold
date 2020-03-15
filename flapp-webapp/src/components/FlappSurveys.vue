@@ -5,13 +5,15 @@
       <NavigationSidebar
         v-bind:selectedSurvey="selectedSurvey"
         v-bind:selectedPage="selectedPage"
-        v-bind:surveyFpoDetails="surveyFpoDetails"
+        v-bind:surveyDetails="surveyDetails"
+        v-bind:surveyJSONs="currentSurveyJSONs"
         v-on:updated-survey="onSidebarClicked"
         v-on:updated-page="onLoadPageTitles"
       />
       <SurveySelector
         v-bind:survey="selectedSurvey"
-        v-on:updated-survey-fpo-details="onUpdateSurveyFpoDetails"
+        v-on:updated-survey-details="onUpdateSurveyDetails"
+        v-on:created-surveyJSONs="onCreatedSurveyJSONs"
       />
 
       <!--SurveyCreatorComponent /-->
@@ -55,12 +57,20 @@ export default {
         this.selectedPage = newValue;
       }
     },
-    surveyFpoDetails: {
+    surveyDetails: {
       get: function() {
-        return this.currentSurveyFpoDetails;
+        return this.currentSurveyDetails;
       },
       set: function(newValue) {
-        this.currentSurveyFpoDetails = newValue;
+        this.currentSurveyDetails = newValue;
+      }
+    },
+    surveyJSONs: {
+      get: function() {
+        return this.currentSurveyJSONs;
+      },
+      set: function(newValue) {
+        this.currentSurveyJSONs = newValue;
       }
     }
   },
@@ -68,7 +78,8 @@ export default {
     return {
       selectedSurvey: "getting-started",
       selectedPage: "",
-      currentSurveyFpoDetails: {}
+      currentSurveyJSONs: [],
+      currentSurveyDetails: {}
     };
   },
   methods: {
@@ -84,13 +95,16 @@ export default {
       console.log("Is now '" + this.survey + "'");
       return value;
     },
-    onUpdateSurveyFpoDetails: function(value) {
+    onUpdateSurveyDetails: function(value) {
       console.log(
-        "In FlappSurveys .  New FPO survey = '" + JSON.stringify(value) + "'"
+        "In FlappSurveys .  Survey = '" + JSON.stringify(value) + "'"
       );
 
-      this.surveyFpoDetails = value;
+      this.surveyDetails = value;
       return value;
+    },
+    onCreatedSurveyJSONs: function(value) {
+      this.surveyJSONs = value;
     }
   }
 };

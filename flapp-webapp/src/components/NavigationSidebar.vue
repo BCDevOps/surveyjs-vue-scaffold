@@ -15,29 +15,26 @@
           <div class="link-icon">1</div>
           <div class="link-label">Getting Started</div>
         </li>
-        <!-- <li
+
+        <li
           tabindex="0"
-          id="applicant-information"
+          v-bind:id="getSurveyId(1)"
           v-on:click="onSelectSurvey($event)"
         >
-          <div class="link-icon">2</div>
-          <div class="link-label">Applicant information</div>
-        </li> -->
-        <li tabindex="0" id="surveyfpo" v-on:click="onSelectSurvey($event)">
           <div class="link-icon">3</div>
           <div class="link-label">
-            {{ surveyFpoDetails.title }}
+            {{ surveyJSONs[1].surveyJSON.title }}
           </div>
-          <div v-bind:id="surveyFpoDetails.id" style="display: none">
+          <div id="survey-fpo-group" style="display: none">
             <ul class="links">
               <li
                 tabindex="1"
-                v-for="page in surveyFpoDetails.pages"
-                v-bind:key="page.page_index"
+                v-for="(page, index) in surveyJSONs[1].surveyJSON.pages"
+                v-bind:key="index"
               >
                 <div
                   class="link-label"
-                  v-bind:id="page.page_id"
+                  v-bind:id="index"
                   v-on:click="onSelectPage($event)"
                 >
                   {{ page.title }}
@@ -46,30 +43,7 @@
             </ul>
           </div>
         </li>
-        <!-- <li tabindex="0" id="flm" v-on:click="onSelectSurvey($event)">
-          <div class="link-icon">4</div>
-          <div class="link-label">FLM</div>
-        </li> -->
-        <!-- <li
-          tabindex="0"
-          id="child-relocation"
-          v-on:click="onSelectSurvey($event)"
-        > -->
-        <!-- <div class="link-icon">5</div>
-          <div class="link-label">Child Relocation</div>
-        </li> -->
-        <!-- <li tabindex="0" id="parenting" v-on:click="onSelectSurvey($event)">
-          <div class="link-icon">6</div>
-          <div class="link-label">Parenting</div>
-        </li> -->
-        <!-- <li tabindex="0" id="case-mgmt" v-on:click="onSelectSurvey($event)">
-          <div class="link-icon">7</div>
-          <div class="link-label">Case Management</div>
-        </li> -->
-        <!-- <li tabindex="0" id="enforcement" v-on:click="onSelectSurvey($event)">
-          <div class="link-icon">8</div>
-          <div class="link-label">Enforcement</div>
-        </li> -->
+
         <li class="separate" />
         <li tabindex="-1" id="print" class="disabled">
           <div class="link-icon">9</div>
@@ -84,9 +58,12 @@
 import * as SurveyVue from "survey-vue";
 
 export default {
-  name: "Sidebar",
+  name: "NavigationSidebar",
   data() {
     return {};
+  },
+  updated() {
+    console.log("In Navigationsidebar.created()" + surveyJSONs);
   },
   methods: {
     onSelectSurvey: function(event) {
@@ -144,12 +121,16 @@ export default {
 
       flag = false;
       return flag;
+    },
+    getSurveyId: function(value) {
+      return "survey-" + value;
     }
   },
   props: {
     selectedSurvey: String,
     selectedPage: String,
-    surveyFpoDetails: Object
+    surveyFpoDetails: Object,
+    surveyJSONs: Array
   }
 };
 </script>

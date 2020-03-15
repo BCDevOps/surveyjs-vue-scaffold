@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="fill-height-lg survey-container contentcontainer codecontainer"
-    id="surveyfpo"
-  >
-    <h2>FPO form</h2>
+  <div class="fill-height-lg survey-container contentcontainer codecontainer">
     <b-container class="fill-body">
       <survey :survey="survey"></survey>
       <!--div id="surveyResult"></div-->
@@ -13,7 +9,6 @@
 
 <script>
 import * as SurveyVue from "survey-vue";
-import surveyPrimaryJSON from "../assets/survey-primary.json";
 import { addQuestionTypes } from "./question-types.ts";
 
 SurveyVue.StylesManager.applyTheme("bcgov");
@@ -25,52 +20,25 @@ addQuestionTypes(SurveyVue);
 }); */
 
 export default {
-  name: "SurveyFPO",
+  name: "SurveyComponent",
   data() {
-    var survey = new SurveyVue.Model(surveyPrimaryJSON);
-    // console.log(survey.title);
-    // console.log(survey.PageCount);
-    // console.log(survey.pages[0].title);
-    // console.log(survey.pages[1].title);
-    var page_index = 0;
-    // for (page in survey.pages) {
-    //   page_title = survey.pages[page].title;
-    //   console.log(page_title);
-    // }
-    //console.log("surveyPrimaryJSON = " + JSON.stringify(surveyPrimaryJSON, null, 3));
+    var survey = new SurveyVue.Model(this.surveyJSON);
     console.log("survey = " + survey);
     survey.completeText = "Next";
     return {
-      survey: survey,
-      survey1: {
-        title: survey.title,
-        id: "fpo-group",
-        pages: [
-          {
-            title: survey.pages[0].title,
-            page_index: 0,
-            page_id: "fpo-group-0"
-          },
-          {
-            title: survey.pages[1].title,
-            page_index: 1,
-            page_id: "fpo-group-1"
-          },
-          {
-            title: "FPO's third page",
-            page_index: 2,
-            page_id: "fpo-group-2"
-          }
-        ]
-      }
+      survey: survey
     };
   },
   created() {
-    this.$emit("updated-survey-fpo-details", this.survey1);
+    this.$emit("updated-survey-details", {
+      surveyIndex: this.surveyIndex,
+      surveyJSON: this.surveyJSON
+    });
   },
   methods: {},
   props: {
-    page: String
+    surveyIndex: Number,
+    surveyJSON: Object
   }
 };
 </script>
