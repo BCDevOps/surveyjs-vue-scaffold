@@ -1,3 +1,13 @@
+import Vue from "vue";
+
+import AddressInfo from "./survey/AddressInfo.vue";
+import ContactInfo from "./survey/ContactInfo.vue";
+import CustomDate from "./survey/CustomDate.vue";
+import HelpText from "./survey/HelpText.vue";
+import InfoText from "./survey/InfoText.vue";
+import PersonName from "./survey/PersonName.vue";
+import YesNo from "./survey/YesNo.vue";
+
 function fixCheckboxes(Survey: any) {
   const widget = {
     name: "fixchecks",
@@ -148,12 +158,13 @@ function initHelpText(Survey: any) {
     }
   };
 
+  Vue.component("HelpText", HelpText);
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
 function initInfoText(Survey: any) {
   const widget = {
-    name: "infotext",
+    name: "InfoText",
     title: "Message Text",
     iconName: "icon-panel",
     widgetIsLoaded: function() {
@@ -174,85 +185,10 @@ function initInfoText(Survey: any) {
           choices: ["info", "inline", "error"]
         }
       ]);
-    },
-    htmlTemplate: "<div></div>",
-    afterRender: function(question: any, el: any) {
-      while (el.childNodes.length) el.removeChild(el.childNodes[0]);
-
-      const outer = document.createElement("div");
-      let outerCls = "panel panel-default ";
-      if (question.messageStyle === "error")
-        outerCls += "survey-infotext error";
-      else if (question.messageStyle === "inline")
-        outerCls += "survey-inlinetext";
-      else outerCls += "survey-infotext";
-      outer.className = outerCls;
-      const header = document.createElement("div");
-      header.className = "panel-heading";
-      const lbl = document.createElement("label");
-      lbl.className = "panel-title";
-
-      let iconCls = null;
-      if (question.messageStyle === "error") iconCls = "heading-icon fa fa-ban";
-      else if (question.messageStyle === "info")
-        iconCls = "heading-icon fa fa-info-circle";
-      const title = document.createElement("span");
-      title.className = "title-text";
-      if (iconCls) {
-        const icon = document.createElement("span");
-        icon.className = iconCls;
-        lbl.appendChild(icon);
-      }
-      lbl.appendChild(title);
-      header.appendChild(lbl);
-      outer.appendChild(header);
-
-      let body: any = null;
-      if (question.body) {
-        body = document.createElement("div");
-        body.className = "panel-body";
-        outer.appendChild(body);
-      }
-
-      if (question.isRequired && !question.value) {
-        const acceptRow = document.createElement("div");
-        acceptRow.className = "row accept-row";
-        const cell = document.createElement("div");
-        cell.className = "col-sm-12";
-        const acceptBtn = document.createElement("button");
-        acceptBtn.className = "btn btn-primary";
-        const acceptLbl = document.createElement("span");
-        acceptLbl.appendChild(document.createTextNode("Continue"));
-        acceptBtn.appendChild(acceptLbl);
-        acceptBtn.addEventListener("click", () => {
-          question.value = 1;
-          acceptRow.style.display = "none";
-        });
-        cell.appendChild(acceptBtn);
-        acceptRow.appendChild(cell);
-        outer.appendChild(acceptRow);
-      }
-
-      el.appendChild(outer);
-
-      const updateContent = () => {
-        const titleContent = question.fullTitle;
-        title.innerHTML = titleContent;
-
-        if (body) {
-          const bodyContent = question.body || "";
-          const bodyHtml = question.getMarkdownHtml(bodyContent);
-          if (bodyHtml !== null)
-            body.innerHTML = question.getProcessedHtml(bodyHtml);
-          else body.innerText = question.getProcessedHtml(bodyContent);
-        }
-      };
-      question.titleChangedCallback = updateContent;
-      updateContent();
-    },
-    willUnmount: function(question: any, el: any) {}
+    }
   };
 
+  Vue.component("InfoText", InfoText);
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
@@ -273,13 +209,13 @@ function initYesNo(Survey: any) {
     }
   };
 
+  Vue.component("YesNo", YesNo);
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
-  console.log(Survey.CustomWidgetCollection);
 }
 
 function initAddressBlock(Survey: any) {
   const widget = {
-    name: "address",
+    name: "AddressInfo",
     title: "Postal Address",
     iconName: "icon-multipletext",
     widgetIsLoaded: function() {
@@ -299,302 +235,10 @@ function initAddressBlock(Survey: any) {
         null,
         "empty"
       );
-    },
-    htmlTemplate: "<div></div>",
-    provinceOptions: function() {
-      return [
-        {
-          value: "AB",
-          text: "Alberta"
-        },
-        {
-          value: "BC",
-          text: "British Columbia"
-        },
-        {
-          value: "MB",
-          text: "Manitoba"
-        },
-        {
-          value: "NB",
-          text: "New Brunswick"
-        },
-        {
-          value: "NF",
-          text: "Newfoundland and Labrador"
-        },
-        {
-          value: "NT",
-          text: "Northwest Territories"
-        },
-        {
-          value: "NS",
-          text: "Nova Scotia"
-        },
-        {
-          value: "NU",
-          text: "Nunavut"
-        },
-        {
-          value: "ON",
-          text: "Ontario"
-        },
-        {
-          value: "PE",
-          text: "Prince Edward Island"
-        },
-        {
-          value: "QC",
-          text: "Quebec"
-        },
-        {
-          value: "SK",
-          text: "Saskatchewan"
-        },
-        {
-          value: "YT",
-          text: "Yukon"
-        }
-      ];
-    },
-    countryOptions: function() {
-      return [
-        {
-          value: "CAN",
-          text: "Canada"
-        },
-        {
-          value: "USA",
-          text: "USA"
-        }
-      ];
-    },
-    prevAddrOptions: function(question: any) {
-      const skipName = question.name;
-      const survey = question.survey;
-      const addrs = [];
-      const seen: any = {};
-      let otherQVal;
-      for (const page of survey.pages) {
-        for (const otherQ of page.questions) {
-          if (
-            otherQ.getType() === "address" &&
-            otherQ.name !== skipName &&
-            (otherQVal = otherQ.value)
-          ) {
-            const parts = [
-              otherQVal.street,
-              otherQVal.city,
-              otherQVal.state,
-              otherQVal.country,
-              otherQVal.postcode
-            ];
-            const lbl = parts
-              .map(p => p.trim())
-              .filter(p => p)
-              .join(", ");
-            if (lbl && !seen[lbl]) {
-              seen[lbl] = 1;
-              addrs.push({
-                name: otherQ.name,
-                label: lbl, // otherQ.referLabel,
-                value: Object.assign({}, otherQ.value)
-              });
-            }
-          }
-        }
-      }
-      addrs.sort((a, b) => a.label.localeCompare(b.label));
-      return addrs;
-    },
-    afterRender: function(question: any, el: any) {
-      while (el.childNodes.length) el.removeChild(el.childNodes[0]);
-
-      const outer = document.createElement("div");
-      const outerCls = "survey-address";
-      let label;
-      let row;
-      let cell;
-      outer.className = outerCls;
-
-      const selOpts = this.prevAddrOptions(question);
-      if (selOpts.length) {
-        row = document.createElement("div");
-        row.className = "row survey-address-line";
-
-        cell = document.createElement("div");
-        cell.className = "col-sm-6 form-inline";
-        label = document.createElement("label");
-        // FIXME - set label.for to province ID
-        label.className = "survey-sublabel";
-        label.appendChild(document.createTextNode("Copy from: \u00a0 "));
-        cell.appendChild(label);
-        const selAddr = document.createElement("select");
-        selAddr.className = "form-control";
-        const opt = document.createElement("option");
-        opt.text = "(Select Address)";
-        opt.value = "";
-        selAddr.appendChild(opt);
-        let selIdx: any;
-        for (selIdx of Object.keys(selOpts)) {
-          const selVal = selOpts[selIdx];
-          const addrOpt = document.createElement("option");
-          addrOpt.text = selVal.label;
-          addrOpt.value = selIdx;
-          selAddr.appendChild(addrOpt);
-        }
-        selAddr.onchange = function() {
-          let selIdx: any;
-          selIdx = (<HTMLInputElement>this).value;
-          if (selIdx.length) {
-            const selAddrOpt = selOpts[selIdx].value;
-            question.value = selAddrOpt;
-          }
-        };
-        cell.appendChild(selAddr);
-        row.appendChild(cell);
-        outer.appendChild(row);
-      }
-
-      row = document.createElement("div");
-      row.className = "row survey-address-line";
-      cell = document.createElement("div");
-      cell.className = "col-sm-12";
-      row.appendChild(cell);
-      const addr1 = document.createElement("input");
-      addr1.className = "form-control";
-      addr1.placeholder = "Street address, for example: 800 Hornby St.";
-      addr1.id = question.inputId; // allow auto focus
-      cell.appendChild(addr1);
-      outer.appendChild(row);
-
-      /*row = document.createElement('div');
-      row.className = 'row survey-address-line';
-      cell = document.createElement('div');
-      cell.className = 'col-sm-12';
-      row.appendChild(cell);
-      let addr2 = document.createElement('input');
-      addr2.className = 'form-control';
-      addr2.placeholder = 'Second address line, if needed';
-      cell.appendChild(addr2);
-      outer.appendChild(row);*/
-
-      row = document.createElement("div");
-      row.className = "row survey-address-line";
-
-      cell = document.createElement("div");
-      cell.className = "col-sm-6";
-      label = document.createElement("label");
-      // FIXME - set label.for to city ID
-      label.className = "survey-sublabel";
-      label.appendChild(document.createTextNode("City / Town"));
-      cell.appendChild(label);
-      const city = document.createElement("input");
-      city.className = "form-control";
-      cell.appendChild(city);
-      row.appendChild(cell);
-
-      cell = document.createElement("div");
-      cell.className = "col-sm-6";
-      label = document.createElement("label");
-      // FIXME - set label.for to province ID
-      label.className = "survey-sublabel";
-      label.appendChild(document.createTextNode("Province / State / Region"));
-      cell.appendChild(label);
-      const state = document.createElement("select");
-      state.className = "form-control";
-      const stateOpts = this.provinceOptions();
-      for (const province of stateOpts) {
-        const opt = document.createElement("option");
-        opt.text = province.text;
-        opt.value = province.value;
-        state.appendChild(opt);
-      }
-      cell.appendChild(state);
-      row.appendChild(cell);
-
-      outer.appendChild(row);
-
-      row = document.createElement("div");
-      row.className = "row survey-address-line";
-
-      cell = document.createElement("div");
-      cell.className = "col-sm-6";
-      label = document.createElement("label");
-      // FIXME - set label.for to province ID
-      label.className = "survey-sublabel";
-      label.appendChild(document.createTextNode("Country"));
-      cell.appendChild(label);
-      const country = document.createElement("select");
-      country.className = "form-control";
-      const countryOpts = this.countryOptions();
-      for (const cval of countryOpts) {
-        const opt = document.createElement("option");
-        opt.text = cval.text;
-        opt.value = cval.value;
-        country.appendChild(opt);
-      }
-      cell.appendChild(country);
-      row.appendChild(cell);
-
-      cell = document.createElement("div");
-      cell.className = "col-sm-6";
-      label = document.createElement("label");
-      // FIXME - set label.for to postal code ID
-      label.className = "survey-sublabel";
-      label.appendChild(document.createTextNode("Postal Code"));
-      cell.appendChild(label);
-      const postCode = document.createElement("input");
-      postCode.className = "form-control";
-      cell.appendChild(postCode);
-      row.appendChild(cell);
-
-      outer.appendChild(row);
-
-      el.appendChild(outer);
-
-      function updateValue(evt: any) {
-        const value = {
-          street: addr1.value,
-          // 'line2': addr2.value,
-          city: city.value,
-          state: state.value,
-          country: country.value,
-          postcode: postCode.value
-        };
-        //let k: any ={};
-        for (let k in value) {
-          if (value[k] !== undefined && value[k].length) {
-            question.value = value;
-            return;
-          }
-        }
-        question.value = null;
-      }
-      addr1.addEventListener("change", updateValue);
-      // addr2.addEventListener('change', updateValue);
-      city.addEventListener("change", updateValue);
-      state.addEventListener("change", updateValue);
-      country.addEventListener("change", updateValue);
-      postCode.addEventListener("change", updateValue);
-
-      question.valueChangedCallback = () => {
-        const val = question.value || {};
-        addr1.value = val.street || "";
-        city.value = val.city || "";
-        state.value = val.state || "BC";
-        country.value = val.country || "CAN";
-        postCode.value = val.postcode || "";
-      };
-      question.valueChangedCallback();
-      // This probably shouldn't be necessary, but the question is sometimes rendered with no value
-      if (question.value === undefined) {
-        setTimeout(question.valueChangedCallback, 50);
-      }
-    },
-    willUnmount: function(question: any, el: any) {}
+    }
   };
 
+  Vue.component("AddressInfo", AddressInfo);
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
@@ -650,12 +294,13 @@ function initPersonName(Survey: any) {
     }
   };
 
+  Vue.component("PersonName", PersonName);
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
 function initContactInfoBlock(Survey: any) {
   const widget = {
-    name: "contactinfo",
+    name: "ContactInfo",
     title: "Contact Info",
     iconName: "icon-multipletext",
     widgetIsLoaded: function() {
@@ -681,82 +326,16 @@ function initContactInfoBlock(Survey: any) {
         null,
         "empty"
       );
-    },
-    htmlTemplate: "<div></div>",
-    afterRender: function(question: any, el: any) {
-      while (el.childNodes.length) el.removeChild(el.childNodes[0]);
-
-      const outer = document.createElement("div");
-      const outerCls = "survey-contactinfo";
-      let label;
-      let row;
-      let cell;
-      let input;
-      outer.className = outerCls;
-
-      row = document.createElement("div");
-      row.className = "row";
-
-      const fields = [
-        { name: "phone", label: "Phone", input: null },
-        { name: "email", label: "Email", input: null },
-        { name: "fax", label: "Fax", input: null }
-      ];
-      const updateValue = function() {
-        let parts: any = {};
-        let field: any = {};
-        for (field of fields) {
-          parts[field.name] = field.input.value.trim();
-        }
-        question.value = parts["phone"] ? parts : null;
-      };
-
-      let field: any = {};
-      for (field of fields) {
-        const altLbl =
-          "label" + field.name[0].toUpperCase() + field.name.substring(1);
-        cell = document.createElement("div");
-        cell.className = "col-sm-4";
-        label = document.createElement("label");
-        label.className = "survey-sublabel";
-        label.appendChild(
-          document.createTextNode(question[altLbl] || field.label)
-        );
-        cell.appendChild(label);
-        input = document.createElement("input");
-        input.className = "form-control";
-        if (field.name === "phone") input.id = question.inputId; // allow auto focus
-        input.addEventListener("change", updateValue);
-        field.input = input;
-        cell.appendChild(input);
-        row.appendChild(cell);
-      }
-
-      outer.appendChild(row);
-      el.appendChild(outer);
-
-      question.valueChangedCallback = () => {
-        let field: any = {};
-        for (field of fields) {
-          field.input.value =
-            (question.value && question.value[field.name]) || "";
-        }
-      };
-      question.valueChangedCallback();
-      // This probably shouldn't be necessary, but the question is sometimes rendered with no value
-      if (question.value === undefined) {
-        setTimeout(question.valueChangedCallback, 50);
-      }
-    },
-    willUnmount: function(question: any, el: any) {}
+    }
   };
 
+  Vue.component("ContactInfo", ContactInfo);
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "type");
 }
 
 function initCustomDate(Survey: any) {
   const widget = {
-    name: "date",
+    name: "CustomDate",
     title: "Date Input",
     iconName: "icon-date",
     widgetIsLoaded: function() {
@@ -776,145 +355,10 @@ function initCustomDate(Survey: any) {
           default: 100
         }
       ]);
-    },
-    htmlTemplate: '<div class="form-inline date-select"></div>',
-    monthOptions: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ],
-    afterRender: function(question: any, el: any) {
-      while (el.childNodes.length) el.removeChild(el.childNodes[0]);
-
-      let yearVal = "";
-      let monthVal = "";
-      let dayVal = "";
-
-      const yearSel = document.createElement("select");
-      const monthSel = document.createElement("select");
-      const daySel = document.createElement("select");
-      const updateDay = function() {
-        while (daySel.childNodes.length > 1)
-          daySel.removeChild(daySel.childNodes[1]);
-        if (yearVal && monthVal) {
-          const lastDay = new Date(
-            parseInt(yearVal, 10),
-            parseInt(monthVal, 10),
-            0
-          ).getDate();
-          for (let day = 1; day <= lastDay; day++) {
-            const dayOpt = document.createElement("option");
-            dayOpt.text = "" + day;
-            dayOpt.value = "" + day;
-            daySel.appendChild(dayOpt);
-          }
-          if (dayVal && parseInt(dayVal, 10) > lastDay) {
-            dayVal = "";
-          }
-        } else {
-          dayVal = "";
-        }
-        daySel.value = dayVal;
-      };
-      const updateValue = function(evt?: any) {
-        updateDay();
-        if (yearVal && monthVal && dayVal) {
-          let dt = "" + yearVal + "-";
-          dt += (monthVal.length < 2 ? "0" : "") + monthVal;
-          dt += "-" + (dayVal.length < 2 ? "0" : "") + dayVal;
-          question.value = dt;
-        } else {
-          question.value = null;
-        }
-      };
-
-      yearSel.className = "form-control date-select-year mr-1";
-      yearSel.id = question.inputId; // allow auto focus
-      const yrFst = document.createElement("option");
-      yrFst.text = "(Year)";
-      yrFst.value = "";
-      yearSel.appendChild(yrFst);
-      let curYear = new Date().getFullYear();
-      const firstYear = curYear - (question.dateYearsBehind || 0);
-      curYear += question.dateYearsAhead || 0;
-      for (let yr = curYear; yr >= firstYear; yr--) {
-        const yropt = document.createElement("option");
-        yropt.text = "" + yr;
-        yropt.value = "" + yr;
-        yearSel.appendChild(yropt);
-      }
-      yearSel.onchange = function() {
-        yearVal = (<HTMLSelectElement>this).value;
-        updateValue();
-        monthSel.focus();
-      };
-      el.appendChild(yearSel);
-
-      monthSel.className = "form-control date-select-month mr-1";
-      const monthFst = document.createElement("option");
-      monthFst.text = "(Month)";
-      monthFst.value = "";
-      monthSel.appendChild(monthFst);
-      for (let mo = 1; mo <= 12; mo++) {
-        const monthOpt = document.createElement("option");
-        monthOpt.text = this.monthOptions[mo - 1];
-        monthOpt.value = "" + mo;
-        monthSel.appendChild(monthOpt);
-      }
-      monthSel.onchange = function() {
-        monthVal = (<HTMLSelectElement>this).value;
-        updateValue();
-        daySel.focus();
-      };
-      el.appendChild(document.createTextNode(" "));
-      el.appendChild(monthSel);
-
-      daySel.className = "form-control date-select-day";
-      const opt = document.createElement("option");
-      opt.text = "(Day)";
-      opt.value = "";
-      daySel.appendChild(opt);
-      daySel.onchange = function() {
-        dayVal = (<HTMLSelectElement>this).value;
-        updateValue();
-      };
-      el.appendChild(document.createTextNode(" "));
-      el.appendChild(daySel);
-
-      const loadValue = function() {
-        if (question.value) {
-          const m = question.value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-          const dt = new Date(m[1], m[2] - 1, m[3]);
-          console.log(dt);
-          if (dt) {
-            yearVal = "" + dt.getFullYear();
-            monthVal = "" + (dt.getMonth() + 1);
-            dayVal = "" + dt.getDate();
-          }
-        }
-        yearSel.value = yearVal;
-        monthSel.value = monthVal;
-        updateDay();
-      };
-      loadValue();
-      question.valueChangedCallback = loadValue;
-      // This probably shouldn't be necessary, but the question is sometimes rendered with no value
-      if (question.value === undefined) {
-        setTimeout(question.valueChangedCallback, 50);
-      }
-    },
-    willUnmount: function(question: any, el: any) {}
+    }
   };
 
+  Vue.component("CustomDate", CustomDate);
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "property");
 }
 
