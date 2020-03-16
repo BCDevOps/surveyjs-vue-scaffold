@@ -1,7 +1,7 @@
 <template>
-  <div class=" fill-body" id="flappsurveys">
+  <div class="fill-body" id="flappsurveys">
     <NavigationTopbar />
-    <main class="app-content fill-body">
+    <main class="app-content">
       <NavigationSidebar
         v-bind:selectedSurveyIndex="v_selectedSurveyIndex"
         v-bind:selectedPageIndex="v_selectedPageIndex"
@@ -115,7 +115,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-@import "../styles/common";
-</style>
