@@ -5,38 +5,46 @@
       <div class="sidebar-title">
         <h3>Application Steps</h3>
       </div>
-      <ul class="links">
+      <ul
+        class="links"
+        v-if="
+          typeof surveyJSONs !== 'undefined' &&
+            surveyJSONs !== null &&
+            surveyJSONs.length > 0
+        "
+      >
         <li
           tabindex="0"
-          class="current"
-          id="getting-started"
+          v-for="(survey, surveyIndex) in surveyJSONs"
+          v-bind:key="surveyIndex"
+          v-bind:id="getSurveyId(surveyIndex)"
+          v-bind:index="surveyIndex"
+          v-bind:class="{ current: surveyIndex === selectedSurveyIndex }"
           v-on:click="onSelectSurvey($event)"
         >
-          <div class="link-icon">1</div>
-          <div class="link-label">Getting Started</div>
-        </li>
-
-        <li
-          tabindex="0"
-          v-bind:id="getSurveyId(1)"
-          v-on:click="onSelectSurvey($event)"
-        >
-          <div class="link-icon">3</div>
+          <div class="link-icon">{{ surveyIndex + 1 }}</div>
           <div class="link-label">
-            {{ surveyJSONs[1].surveyJSON.title }}
+            {{ surveyJSONs[surveyIndex].surveyJSON.title }}
           </div>
-          <div id="survey-fpo-group" style="display: none">
+          <div
+            v-bind:id="getSurveyGroupId(surveyIndex)"
+            v-bind:index="surveyIndex"
+            v-bind:style="
+              surveyIndex === selectedSurveyIndex
+                ? 'display: block;'
+                : 'display: none;'
+            "
+          >
             <ul class="links">
               <li
                 tabindex="1"
-                v-for="(page, index) in surveyJSONs[1].surveyJSON.pages"
-                v-bind:key="index"
+                v-for="(page, pageIndex) in surveyJSONs[surveyIndex].surveyJSON
+                  .pages"
+                v-bind:key="pageIndex"
+                v-bind:id="getSurveyPageId(surveyIndex, pageIndex)"
+                v-bind:index="pageIndex"
               >
-                <div
-                  class="link-label"
-                  v-bind:id="index"
-                  v-on:click="onSelectPage($event)"
-                >
+                <div class="link-label" v-on:click="onSelectPage($event)">
                   {{ page.title }}
                 </div>
               </li>
@@ -46,7 +54,7 @@
 
         <li class="separate" />
         <li tabindex="-1" id="print" class="disabled">
-          <div class="link-icon">9</div>
+          <div class="link-icon">{{ surveyJSONs.length + 1 }}</div>
           <div class="link-label">Print Application Forms</div>
         </li>
       </ul>
@@ -62,33 +70,32 @@ export default {
   data() {
     return {};
   },
-  updated() {
-    console.log("In Navigationsidebar.created()" + surveyJSONs);
-  },
   methods: {
     onSelectSurvey: function(event) {
-      var fpo = document.getElementById("surveyfpo");
-      var fpo_group = document.getElementById("fpo-group");
-      var prev = document.getElementById(this.selectedSurvey);
-      var curr = event.currentTarget;
+      var currIndex = this.selectedSurveyIndex;
+      var curr = document.getElementById(this.getSurveyId(currIndex));
+      var currChildGroup = document.getElementById(
+        this.getSurveyGroupId(currIndex)
+      );
+      var next = event.currentTarget;
+      var nextIndex = parseInt(next.getAttribute("index"));
+      var nextChildGroup = document.getElementById(
+        this.getSurveyGroupId(nextIndex)
+      );
 
-      if (prev == curr) {
-        // same choice; do nothing
+      if (curr == next) {
+        // same choice.
+        next.classList.add("current");
+        nextChildGroup.style.display = "block";
       } else {
-        curr.classList.add("current");
-        prev.classList.remove("current");
+        next.classList.add("current");
+        nextChildGroup.style.display = "block";
 
-        if (prev == fpo) {
-          fpo_group.style.display = "none";
-        } else if (curr == fpo) {
-          fpo_group.style.display = "block";
-        }
+        curr.classList.remove("current");
+        currChildGroup.style.display = "none";
       }
 
-      console.log("updated-selection id :" + event.currentTarget.id);
-      console.log("updated-selection value :" + event.currentTarget.value);
-
-      this.$emit("updated-survey", event.currentTarget.id);
+      this.$emit("updated-survey-index", parseInt(nextIndex));
     },
     //TODO: This is where the step is selected
     onSelectPage: function(event) {
@@ -110,26 +117,21 @@ export default {
         }
       }
 
-      this.$emit("updated-page", event.currentTarget.id);
+      this.$emit("updated-page-index", event.currentTarget.pageIndex);
     },
-    isSurveyFpoDetailsDefined: function() {
-      var flag =
-        typeof this.surveyFpoDetails.surveys !== "undefined" &&
-        this.surveyFpoDetails.surveys !== null;
-
-      console.log("isSurveyFpoDetailsDefined: " + flag);
-
-      flag = false;
-      return flag;
+    getSurveyId: function(surveyIndex) {
+      return "survey-" + surveyIndex;
     },
-    getSurveyId: function(value) {
-      return "survey-" + value;
+    getSurveyGroupId: function(surveyIndex) {
+      return this.getSurveyId(surveyIndex) + "-group";
+    },
+    getSurveyPageId: function(surveyIndex, pageIndex) {
+      return this.getSurveyId(surveyIndex) + "-page-" + pageIndex;
     }
   },
   props: {
-    selectedSurvey: String,
-    selectedPage: String,
-    surveyFpoDetails: Object,
+    selectedSurveyIndex: Number,
+    selectedPageIndex: Number,
     surveyJSONs: Array
   }
 };
