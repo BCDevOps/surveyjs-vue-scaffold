@@ -1,6 +1,4 @@
 // define variables and functions for use by isolated components
 
-//@import "~@bcgov/bootstrap-theme/dist/scss/common";
 @import "variables";
-@import "styles";
-@import "./../../node_modules/~@bcgov/bootstrap-theme/dist/scss/common";
+@import "~@bcgov/bootstrap-theme/dist/scss/common";

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fill-height-lg survey-container contentcontainer codecontainer"
+    class="survey-container contentcontainer codecontainer"
     id="fpocomponent"
   >
     <h2>Getting Started</h2>
@@ -57,8 +57,3 @@ export default {
   }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-@import "../styles/_survey.scss";
-</style>
