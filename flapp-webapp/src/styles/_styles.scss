@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-$bcgov-font-path: "../node_modules/@bcgov/bootstrap-theme/dist/fonts/";
-@import "~@bcgov/bootstrap-theme/dist/scss/bootstrap-theme";
+$bcgov-font-path: "/../../node_modules/@bcgov/bootstrap-theme/dist/fonts/";
+@import "/../../node_modules/@bcgov/bootstrap-theme/dist/scss/bootstrap-theme";
 
 .breadcrumb {
   margin-bottom: 0;
@@ -53,7 +53,7 @@ $bcgov-font-path: "../node_modules/@bcgov/bootstrap-theme/dist/fonts/";
 }
 
 // needed for sidebar - override normal breakpoint-dependent container width
-/*
+
 .container {
   width: auto;
   @media (min-width: 768px) {
@@ -66,7 +66,10 @@ $bcgov-font-path: "../node_modules/@bcgov/bootstrap-theme/dist/fonts/";
     max-width: 1170px;
   }
 }
-*/
+
+.contentcontainer {
+  min-height: 40em;
+}
 
 // loading indicator
 @keyframes spin {
@@ -153,4 +156,86 @@ $indicator-thickness: 0.2em;
   }
 }
 
-@import "survey";
+//Below are styles for the FPO
+.app-content {
+  display: flex;
+  flex: 1 0 auto;
+  flex-flow: row nowrap;
+  max-width: 100%;
+  padding-top: 0;
+  padding-bottom: 3.5rem;
+  min-height: 100%;
+}
+
+.app-main {
+  flex: auto;
+  padding: 0 15px 80px;
+}
+
+.app-outer {
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100%;
+}
+
+@include media-breakpoint-down(md) {
+  .navbar .navbar-text {
+    font-size: 1em;
+  }
+  .navbar .navbar-extra {
+    flex: 0 1 auto;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .sidebar-left,
+  .sidebar-right {
+    width: $sidebar-width-lg;
+  }
+}
+
+.sidebar-left,
+.sidebar-right {
+  display: block;
+  flex: none;
+  overflow: hidden;
+  position: relative;
+  transition: width 0.2s ease-in;
+  width: $sidebar-width-md;
+  &.insert-hidden {
+    width: 0;
+  }
+}
+
+// Header styles
+
+.navbar-tag {
+  border: 1px solid #fff;
+  border-radius: 2px;
+  display: inline-block;
+  font-size: 60%;
+  line-height: 1;
+  margin-left: 0.5em;
+  padding: 0.25em 0.5em;
+  vertical-align: text-bottom;
+}
+
+.navbar-brand:not(.logo) {
+  flex: 1 1 auto;
+}
+
+.navbar .navbar-extra {
+  display: inline-block;
+  flex: 1 1 auto;
+  text-align: right;
+}
+
+// https://www.freecodecamp.org/news/how-to-keep-your-footer-where-it-belongs-59c6aa05c59c/
+
+#footer {
+  position: absolute;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 3.5rem; /* Footer height */
+}

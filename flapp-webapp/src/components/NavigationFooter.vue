@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <footer>
     <nav class="navbar navbar-expand-lg navbar-dark">
       <!-- Navbar content -->
       <div class="container">
@@ -59,3 +59,6 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+@import "../styles/common";
+</style>
