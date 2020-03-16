@@ -3,15 +3,14 @@
     <NavigationTopbar />
     <main class="app-content fill-body">
       <NavigationSidebar
-        v-bind:selectedSurvey="selectedSurvey"
-        v-bind:selectedPage="selectedPage"
-        v-bind:surveyDetails="surveyDetails"
-        v-bind:surveyJSONs="currentSurveyJSONs"
-        v-on:updated-survey="onSidebarClicked"
-        v-on:updated-page="onLoadPageTitles"
+        v-bind:selectedSurveyIndex="v_selectedSurveyIndex"
+        v-bind:selectedPageIndex="v_selectedPageIndex"
+        v-bind:surveyJSONs="v_surveyJSONs"
+        v-on:updated-survey-index="onUpdateSurveyIndex"
+        v-on:updated-page-index="onUpdatePageIndex"
       />
       <SurveySelector
-        v-bind:survey="selectedSurvey"
+        v-bind:selectedSurveyIndex="v_selectedSurveyIndex"
         v-on:updated-survey-details="onUpdateSurveyDetails"
         v-on:created-surveyJSONs="onCreatedSurveyJSONs"
       />
@@ -41,20 +40,20 @@ export default {
     //SurveyCreatorComponent
   },
   computed: {
-    survey: {
+    selectedSurveyIndex: {
       get: function() {
-        return this.selectedSurvey;
+        return this.v_selectedSurveyIndex;
       },
       set: function(newValue) {
-        this.selectedSurvey = newValue;
+        this.v_selectedSurveyIndex = newValue;
       }
     },
-    page: {
+    selectedPageIndex: {
       get: function() {
-        return this.selectedPage;
+        return this.v_selectedPageIndex;
       },
       set: function(newValue) {
-        this.selectedPage = newValue;
+        this.v_selectedPageIndex = newValue;
       }
     },
     surveyDetails: {
@@ -67,32 +66,39 @@ export default {
     },
     surveyJSONs: {
       get: function() {
-        return this.currentSurveyJSONs;
+        return this.v_surveyJSONs;
       },
       set: function(newValue) {
-        this.currentSurveyJSONs = newValue;
+        this.v_surveyJSONs = newValue;
       }
     }
   },
   data() {
     return {
-      selectedSurvey: "getting-started",
-      selectedPage: "",
-      currentSurveyJSONs: [],
-      currentSurveyDetails: {}
+      v_selectedSurveyIndex: 2,
+      v_selectedPageIndex: 0,
+      v_surveyJSONs: []
     };
   },
   methods: {
-    onLoadPageTitles(value) {
-      console.log("this.page was '" + this.page + "'");
-      this.page = value;
-      console.log("this.page is now '" + this.page + "'");
+    onUpdatePageIndex(value) {
+      console.log(
+        "this.selectedPageIndexhis.page was '" + this.selectedPageIndex + "'"
+      );
+      this.selectedPageIndex = value;
+      console.log(
+        "this.selectedPageIndex is now '" + this.selectedPageIndex + "'"
+      );
       return value;
     },
-    onSidebarClicked(value) {
-      console.log("Was '" + this.survey + "'");
-      this.survey = value;
-      console.log("Is now '" + this.survey + "'");
+    onUpdateSurveyIndex(value) {
+      console.log(
+        "this.selectedSurveyIndex was '" + this.selectedSurveyIndex + "'"
+      );
+      this.selectedSurveyIndex = value;
+      console.log(
+        "this.selectedSurveyIndex is now '" + this.selectedSurveyIndex + "'"
+      );
       return value;
     },
     onUpdateSurveyDetails: function(value) {
