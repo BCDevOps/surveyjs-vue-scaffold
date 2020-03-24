@@ -21,6 +21,7 @@ addQuestionTypes(SurveyVue);
 
 export default {
   name: "SurveyComponent",
+  //store,
   data() {
     var survey = new SurveyVue.Model(this.surveyJSON);
     console.log("survey = " + survey);
@@ -35,7 +36,7 @@ export default {
       surveyJSON: this.surveyJSON
     });
   },
-  methods: {},
+
   props: {
     surveyIndex: Number,
     surveyJSON: Object

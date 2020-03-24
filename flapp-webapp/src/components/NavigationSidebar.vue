@@ -6,7 +6,7 @@
         <h3>Application Steps</h3>
       </div>
       <ul
-        class="links"
+        class="surveys"
         v-if="
           typeof surveyJSONs !== 'undefined' &&
             surveyJSONs !== null &&
@@ -19,12 +19,16 @@
           v-bind:key="surveyIndex"
           v-bind:id="getSurveyId(surveyIndex)"
           v-bind:index="surveyIndex"
-          v-bind:class="{ current: surveyIndex === selectedSurveyIndex }"
+          v-bind:class="{
+            current: surveyIndex === selectedSurveyIndex
+          }"
           v-on:click="onSelectSurvey($event)"
         >
-          <div class="link-icon">{{ surveyIndex + 1 }}</div>
-          <div class="link-label">
-            {{ surveyJSONs[surveyIndex].surveyJSON.title }}
+          <div class="current-header">
+            <div class="link-icon"><i class="fa fa-users"></i></div>
+            <div class="link-label">
+              {{ surveyJSONs[surveyIndex].surveyJSON.title }}
+            </div>
           </div>
           <div
             v-bind:id="getSurveyGroupId(surveyIndex)"
@@ -35,7 +39,7 @@
                 : 'display: none;'
             "
           >
-            <ul class="links">
+            <ul>
               <li
                 tabindex="1"
                 v-for="(page, pageIndex) in surveyJSONs[surveyIndex].surveyJSON
@@ -44,7 +48,18 @@
                 v-bind:id="getSurveyPageId(surveyIndex, pageIndex)"
                 v-bind:index="pageIndex"
               >
-                <div class="link-label" v-on:click="onSelectPage($event)">
+                <div
+                  class="link-label"
+                  v-on:click="onSelectPage($event)"
+                  v-if="selectedPageIndex === pageIndex"
+                >
+                  <u>{{ page.title }}</u>
+                </div>
+                <div
+                  class="link-label"
+                  v-on:click="onSelectPage($event)"
+                  v-else
+                >
                   {{ page.title }}
                 </div>
               </li>
@@ -81,6 +96,11 @@ export default {
       var nextIndex = parseInt(next.getAttribute("index"));
       var nextChildGroup = document.getElementById(
         this.getSurveyGroupId(nextIndex)
+      );
+
+      this.$store.commit(
+        "listName",
+        this.surveyJSONs[nextIndex].surveyJSON.title
       );
 
       if (curr == next) {
@@ -272,13 +292,18 @@ $link-disabled-color: #777;
       }
     }
     &.current {
-      background: $gov-gold;
+      //background: $gov-gold;
+      .verticalLine {
+        border-left: solid $gov-gold;
+      }
       .link-icon {
+        //background: $gov-gold;
         border-color: $link-current-color;
         color: $link-current-color;
         font-weight: bold;
       }
       .link-label {
+        //background: $gov-gold;
         color: $link-current-color;
       }
     }
@@ -315,9 +340,9 @@ $link-disabled-color: #777;
   color: $text-color-link;
   font-size: 20px;
   flex: none;
-  height: 28px;
-  line-height: 24px;
-  width: 28px;
+  height: 38px;
+  line-height: 34px;
+  width: 38px;
   text-align: center;
   transition: border-color color 0.1s linear;
   font-variant-numeric: tabular-nums;
@@ -333,5 +358,98 @@ $link-disabled-color: #777;
   padding-left: 10px;
   padding-top: 5px;
   transition: color 0.1s linear;
+}
+
+.surveys {
+  display: block;
+  list-style-type: none;
+  margin: 0;
+  max-width: 100%;
+  padding: 0;
+  li {
+    cursor: pointer;
+    //display: flex;
+    //flex-flow: row wrap;
+    list-style-type: none;
+    margin: 0;
+    padding: 0.5rem 1em;
+    &.disabled {
+      cursor: not-allowed;
+    }
+    &:not(.current):not(:active):not(:focus):not(.disabled):hover {
+      .link-icon {
+        border-color: $link-hover-color;
+        color: $link-hover-color;
+      }
+      .link-label {
+        color: $link-hover-color;
+      }
+    }
+    &:active,
+    &:focus {
+      .link-icon {
+        border-color: $link-active-color;
+        color: $link-active-color;
+        font-weight: bold;
+      }
+      .link-label {
+        color: $link-active-color;
+      }
+    }
+    &.current {
+      //background: $gov-gold;
+      .current-header {
+        flex-flow: row nowrap;
+        background: $gov-gold;
+        display: flex;
+        list-style-type: none;
+        margin: 0;
+        width: 100%;
+        padding: 1em 1em;
+        .link-icon {
+          //background: $gov-gold;
+          border-color: $link-current-color;
+          color: $link-current-color;
+          font-weight: bold;
+        }
+        .link-label {
+          //background: $gov-gold;
+          color: $link-current-color;
+        }
+      }
+    }
+    &.disabled {
+      .link-icon {
+        border-color: $link-disabled-color;
+        color: $link-disabled-color;
+      }
+      .link-label {
+        color: $link-disabled-color;
+      }
+    }
+    &.separate {
+      margin-top: 1em;
+      &::before {
+        display: block;
+        content: " ";
+        margin: 0 1.5em;
+        position: relative;
+        top: -0.75em;
+        height: 1px;
+        background: #25b;
+        width: 100%;
+      }
+    }
+    div {
+      ul {
+        margin: 1em 2em;
+        border-left: solid $gov-gold;
+        li {
+          padding: 0;
+          margin: 0;
+        }
+      }
+    }
+  }
 }
 </style>

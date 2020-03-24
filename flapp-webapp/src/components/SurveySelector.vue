@@ -61,6 +61,11 @@ export default {
   },
   props: {
     selectedSurveyIndex: Number
+  },
+  computed: {
+    name() {
+      return this.$store.state.name;
+    }
   }
 };
 </script>
