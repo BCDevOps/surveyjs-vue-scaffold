@@ -94,11 +94,6 @@ export default {
         this.getSurveyGroupId(nextIndex)
       );
 
-      this.$store.commit(
-        "listName",
-        this.surveyJSONs[nextIndex].surveyJSON.title
-      );
-
       if (curr == next) {
         // same choice.
         next.classList.add("current");
@@ -112,6 +107,16 @@ export default {
       }
 
       this.$emit("updated-survey-index", nextIndex);
+
+      console.log(
+        "vuex selectedSurveyIndex before change: " +
+          this.$store.getters.selectedSurveyIndex
+      );
+      this.$store.commit("setSelectedSurveyIndex", nextIndex);
+      console.log(
+        "vuex selectedSurveyIndex before change: " +
+          this.$store.getters.selectedSurveyIndex
+      );
     },
     //TODO: This is where the step is selected
     onSelectPage: function(event) {

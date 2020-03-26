@@ -28,6 +28,10 @@ import SurveySelector from "./SurveySelector.vue";
 //import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
 import NavigationFooter from "./NavigationFooter.vue";
 
+import startJSON from "../assets/survey-start-your-application.json";
+import fpoJSON from "../assets/survey-fpo.json";
+import flmJSON from "../assets/survey-flm.json";
+
 export default {
   name: "FlappSurveys",
   components: {
@@ -79,6 +83,17 @@ export default {
       v_selectedPageIndex: 0,
       v_surveyJSONs: []
     };
+  },
+  beforeCreate() {
+    var surveyJSONs = [
+      { surveyJSON: startJSON, icon: "fa-headphones" },
+      { surveyJSON: fpoJSON, icon: "fa-users" },
+      { surveyJSON: flmJSON, icon: "fa-anchor" }
+    ];
+
+    this.$store.commit("setSurveyJSONs", surveyJSONs);
+    this.$store.commit("setSelectedSurveyIndex", 0);
+    this.$store.commit("setSelectedPageIndex", 0);
   },
   methods: {
     onUpdatePageIndex(value) {

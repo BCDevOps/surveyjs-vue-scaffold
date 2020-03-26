@@ -10,15 +10,19 @@ export const store = new Vuex.Store({
     surveyJSONs: Array
   },
   mutations: {
-    listName(state, name) {
-      state.name = name;
+    setSelectedSurveyIndex(state, surveyIndex) {
+      state.selectedSurveyIndex = surveyIndex;
     },
-    listSelectedSurveyIndex(state, selectedSurveyIndex) {
-      state.selectedSurveyIndex = selectedSurveyIndex;
+    setSelectedPageIndex(state, pageIndex) {
+      state.selectedPageIndex = pageIndex;
+    },
+    setSurveyJSONs(state, surveyJSONs) {
+      state.surveyJSONs = surveyJSONs;
     }
   },
   getters: {
-    name: state => state.name,
-    selectedSurveyIndex: state => state.selectedSurveyIndex
+    selectedSurveyIndex: state => state.selectedSurveyIndex,
+    selectedPageIndex: state => state.selectedPageIndex,
+    surveyJSONs: state => state.surveyJSONs
   }
 });
