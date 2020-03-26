@@ -32,9 +32,9 @@ export default {
   data() {
     return {
       surveyJSONs: [
-        { surveyJSON: startJSON },
-        { surveyJSON: fpoJSON },
-        { surveyJSON: flmJSON }
+        { surveyJSON: startJSON, icon: "fa-headphones" },
+        { surveyJSON: fpoJSON, icon: "fa-users" },
+        { surveyJSON: flmJSON, icon: "fa-anchor" }
       ]
     };
   },
