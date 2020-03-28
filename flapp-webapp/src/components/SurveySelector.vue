@@ -2,12 +2,12 @@
   <div class="fill-height-lg" id="surveyselector">
     <b-container class="fill-body">
       <SurveyComponent
-        v-for="(survey, index) in surveyJSONs"
-        v-show="index === selectedSurveyIndex"
+        v-for="(survey, index) in $store.getters.surveyJSONs"
+        v-show="index === $store.getters.surveyIndex"
         v-bind:key="index"
         v-bind:surveyIndex="index"
-        v-bind:surveyJSON="survey.surveyJSON"
-        v-on:updated-survey-details="onUpdateSurveyDetails"
+        v-bind:surveyJSONs="$store.getters.surveyJSONs"
+        v-bind:pageIndex="survey.pageIndex"
       />
     </b-container>
   </div>
@@ -30,43 +30,15 @@ SurveyVue.StylesManager.applyTheme("bcgov");
 export default {
   name: "SurveySelector",
   data() {
-    return {
-      surveyJSONs: [
-        { surveyJSON: startJSON, icon: "fa-headphones" },
-        { surveyJSON: fpoJSON, icon: "fa-users" },
-        { surveyJSON: flmJSON, icon: "fa-anchor" }
-      ]
-    };
+    return {};
   },
-  created() {
-    console.log(
-      "In SurveySelector created(): surveyJSONs = " +
-        JSON.stringify(this.surveyJSONs)
-    );
-    this.$emit("created-surveyJSONs", this.surveyJSONs);
-  },
+  created() {},
   components: {
     SurveyComponent
   },
-  methods: {
-    onUpdateSurveyDetails: function(value) {
-      console.log(
-        "In SurveySelector.onUpdateSurveyDetails().  Value = '" +
-          JSON.stringify(value) +
-          "'"
-      );
-      this.$emit("updated-survey-details", value);
-      return value;
-    }
-  },
-  props: {
-    selectedSurveyIndex: Number
-  },
-  computed: {
-    name() {
-      return this.$store.state.name;
-    }
-  }
+  methods: {},
+  props: {},
+  computed: {}
 };
 </script>
 

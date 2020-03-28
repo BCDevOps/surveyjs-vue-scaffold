@@ -7,23 +7,23 @@
       </div>
       <a
         class="survey"
-        v-for="(survey, surveyIndex) in surveyJSONs"
+        v-for="(survey, surveyIndex) in $store.getters.surveyJSONs"
         v-bind:key="surveyIndex"
         v-bind:id="getSurveyId(surveyIndex)"
         v-bind:index="surveyIndex"
         v-bind:class="{
-          current: surveyIndex === selectedSurveyIndex
+          current: surveyIndex === $store.getters.surveyIndex
         }"
         v-on:click="onSelectSurvey($event)"
       >
         <div class="survey-header">
           <div class="header-icon">
-            <i v-bind:class="['fa', surveyJSONs[surveyIndex].icon]"></i>
+            <i v-bind:class="['fa', survey.icon]"></i>
           </div>
           <div class="header-text">
             <div class="text-step">STEP {{ surveyIndex + 1 }}</div>
             <div class="text-title">
-              {{ surveyJSONs[surveyIndex].surveyJSON.title }}
+              {{ survey.surveyJSON.title }}
             </div>
           </div>
         </div>
@@ -32,7 +32,7 @@
           v-bind:id="getSurveyGroupId(surveyIndex)"
           v-bind:index="surveyIndex"
           v-bind:style="
-            surveyIndex === selectedSurveyIndex
+            surveyIndex === $store.getters.surveyIndex
               ? 'display: block;'
               : 'display: none;'
           "
@@ -40,13 +40,12 @@
           <ul>
             <li
               tabindex="1"
-              v-for="(page, pageIndex) in surveyJSONs[surveyIndex].surveyJSON
-                .pages"
+              v-for="(page, pageIndex) in survey.surveyJSON.pages"
               v-bind:key="pageIndex"
               v-bind:id="getSurveyPageId(surveyIndex, pageIndex)"
               v-bind:index="pageIndex"
               v-bind:class="{
-                current: pageIndex === selectedPageIndex
+                current: pageIndex === survey.pageIndex
               }"
               v-on:click="onSelectPage($event)"
             >
@@ -62,7 +61,9 @@
         <div class="survey-header">
           <div class="header-icon"><i class="fa fa-print"></i></div>
           <div class="header-text">
-            <div class="text-step">STEP {{ surveyJSONs.length + 1 }}</div>
+            <div class="text-step">
+              STEP {{ $store.getters.surveyJSONs.length + 1 }}
+            </div>
             <div class="text-title">
               Print Application Forms
             </div>
@@ -83,7 +84,7 @@ export default {
   },
   methods: {
     onSelectSurvey: function(event) {
-      var currIndex = this.selectedSurveyIndex;
+      var currIndex = this.$store.getters.surveyIndex;
       var curr = document.getElementById(this.getSurveyId(currIndex));
       var currChildGroup = document.getElementById(
         this.getSurveyGroupId(currIndex)
@@ -106,34 +107,19 @@ export default {
         currChildGroup.style.display = "none";
       }
 
-      this.$emit("updated-survey-index", nextIndex);
-
-      console.log(
-        "vuex selectedSurveyIndex before change: " +
-          this.$store.getters.selectedSurveyIndex
-      );
-      this.$store.commit("setSelectedSurveyIndex", nextIndex);
-      console.log(
-        "vuex selectedSurveyIndex before change: " +
-          this.$store.getters.selectedSurveyIndex
-      );
+      this.$store.dispatch("setSurveyIndex", nextIndex);
     },
     //TODO: This is where the step is selected
     onSelectPage: function(event) {
-      // var step1 = document.getElementById("fpo-group");
-      //console.log("page11 is " + page1);
-      console.log("this.selectedPage is " + this.selectedPageIndex);
-
-      var currSurveyIndex = this.selectedSurveyIndex;
-      var currPageIndex = this.selectedPageIndex;
+      var currSurveyIndex = this.$store.getters.surveyIndex;
+      var currPageIndex = this.$store.getters.surveyJSONs[currSurveyIndex]
+        .pageIndex;
       var currPage = document.getElementById(
         this.getSurveyPageId(currSurveyIndex, currPageIndex)
       );
-      console.log("curr page index is " + currPageIndex);
-      var nextPage = event.currentTarget;
 
+      var nextPage = event.currentTarget;
       var nextPageIndex = parseInt(nextPage.getAttribute("index"));
-      console.log("next page is " + nextPageIndex);
 
       if (currPage == nextPage) {
         // same choice; do nothing
@@ -145,7 +131,10 @@ export default {
         }
       }
 
-      this.$emit("updated-page-index", nextPageIndex);
+      this.$store.dispatch("setSurveyPageIndex", {
+        surveyIndex: currSurveyIndex,
+        pageIndex: nextPageIndex
+      });
     },
     getSurveyId: function(surveyIndex) {
       return "survey-" + surveyIndex;
@@ -157,11 +146,7 @@ export default {
       return this.getSurveyId(surveyIndex) + "-page-" + pageIndex;
     }
   },
-  props: {
-    selectedSurveyIndex: Number,
-    selectedPageIndex: Number,
-    surveyJSONs: Array
-  }
+  props: {}
 };
 </script>
 

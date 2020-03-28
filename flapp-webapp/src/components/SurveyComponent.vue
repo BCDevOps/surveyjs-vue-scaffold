@@ -14,32 +14,55 @@ import { addQuestionTypes } from "./question-types.ts";
 SurveyVue.StylesManager.applyTheme("bcgov");
 addQuestionTypes(SurveyVue);
 
-/* survey.onComplete.add(function(result) {
-  document.querySelector("#surveyResult").textContent =
-    "Result JSON:\n" + JSON.stringify(result.data, null, 3);
-}); */
-
 export default {
   name: "SurveyComponent",
   //store,
   data() {
-    var survey = new SurveyVue.Model(this.surveyJSON);
-    console.log("survey = " + survey);
+    var survey = new SurveyVue.Model(
+      this.surveyJSONs[this.surveyIndex].surveyJSON
+    );
+
+    // place the surveyIndex inside the survey object
+    survey.custom_SurveyIndex = this.surveyIndex;
+
+    survey.onCurrentPageChanged.add((sender, options) => {
+      this.onCurrentPageChanged(
+        sender.custom_SurveyIndex,
+        sender.currentPageNo
+      );
+    });
+
     survey.completeText = "Next";
+
     return {
       survey: survey
     };
   },
   created() {
-    this.$emit("updated-survey-details", {
-      surveyIndex: this.surveyIndex,
-      surveyJSON: this.surveyJSON
-    });
+    console.log(
+      "surveyIndex: " +
+        this.surveyIndex +
+        ", pageIndex: " +
+        this.surveyJSONs[this.surveyIndex].pageIndex
+    );
   },
-
+  methods: {
+    onCurrentPageChanged: function(surveyIndex, pageIndex) {
+      this.$store.dispatch("setSurveyPageIndex", {
+        surveyIndex: surveyIndex,
+        pageIndex: pageIndex
+      });
+    }
+  },
   props: {
     surveyIndex: Number,
-    surveyJSON: Object
+    surveyJSONs: Array,
+    pageIndex: Number
+  },
+  watch: {
+    pageIndex: function(newVal, oldVall) {
+      this.survey.currentPageNo = newVal;
+    }
   }
 };
 </script>

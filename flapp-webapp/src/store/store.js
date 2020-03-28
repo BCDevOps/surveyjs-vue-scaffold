@@ -5,24 +5,33 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-    selectedSurveyIndex: Number,
-    selectedPageIndex: Number,
+    surveyIndex: Number,
     surveyJSONs: Array
   },
+  getters: {
+    surveyIndex: state => state.surveyIndex,
+    surveyJSONs: state => state.surveyJSONs
+  },
   mutations: {
-    setSelectedSurveyIndex(state, surveyIndex) {
-      state.selectedSurveyIndex = surveyIndex;
+    setSurveyIndex(state, surveyIndex) {
+      state.surveyIndex = surveyIndex;
     },
-    setSelectedPageIndex(state, pageIndex) {
-      state.selectedPageIndex = pageIndex;
+    setSurveyPageIndex(state, obj) {
+      state.surveyJSONs[obj.surveyIndex].pageIndex = obj.pageIndex;
     },
     setSurveyJSONs(state, surveyJSONs) {
       state.surveyJSONs = surveyJSONs;
     }
   },
-  getters: {
-    selectedSurveyIndex: state => state.selectedSurveyIndex,
-    selectedPageIndex: state => state.selectedPageIndex,
-    surveyJSONs: state => state.surveyJSONs
+  actions: {
+    setSurveyIndex(context, surveyIndex) {
+      context.commit("setSurveyIndex", surveyIndex);
+    },
+    setSurveyPageIndex(context, obj) {
+      context.commit("setSurveyPageIndex", obj);
+    },
+    setSurveyJSONs(context, surveyJSONs) {
+      context.commit("setSurveyJSONs", surveyJSONs);
+    }
   }
 });
