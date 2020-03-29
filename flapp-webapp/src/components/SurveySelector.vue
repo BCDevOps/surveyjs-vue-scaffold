@@ -2,11 +2,10 @@
   <div class="fill-height-lg" id="surveyselector">
     <b-container class="fill-body">
       <SurveyComponent
-        v-for="(survey, index) in $store.getters.surveyJSONs"
+        v-for="(survey, index) in $store.getters.surveyArray"
         v-show="index === $store.getters.surveyIndex"
         v-bind:key="index"
         v-bind:surveyIndex="index"
-        v-bind:surveyJSONs="$store.getters.surveyJSONs"
         v-bind:pageIndex="survey.pageIndex"
       />
     </b-container>
@@ -16,9 +15,6 @@
 <script>
 import * as SurveyVue from "survey-vue";
 import SurveyComponent from "./SurveyComponent.vue";
-import startJSON from "../assets/survey-start-your-application.json";
-import fpoJSON from "../assets/survey-fpo.json";
-import flmJSON from "../assets/survey-flm.json";
 
 SurveyVue.StylesManager.applyTheme("bcgov");
 

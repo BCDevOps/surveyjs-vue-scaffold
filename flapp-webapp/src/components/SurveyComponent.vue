@@ -1,7 +1,7 @@
 <template>
   <div class="fill-height-lg survey-container contentcontainer codecontainer">
     <b-container class="fill-body">
-      <survey :survey="survey"></survey>
+      <survey v-bind:survey="survey"></survey>
       <!--div id="surveyResult"></div-->
     </b-container>
   </div>
@@ -16,47 +16,105 @@ addQuestionTypes(SurveyVue);
 
 export default {
   name: "SurveyComponent",
-  //store,
   data() {
     var survey = new SurveyVue.Model(
-      this.surveyJSONs[this.surveyIndex].surveyJSON
+      this.$store.getters.surveyArray[this.surveyIndex].json
     );
 
-    // place the surveyIndex inside the survey object
-    survey.custom_SurveyIndex = this.surveyIndex;
+    survey.data = this.$store.getters.surveyArray[this.surveyIndex].data;
 
-    survey.onCurrentPageChanged.add((sender, options) => {
+    // place the surveyIndex inside the survey object
+    survey.custom_surveyIndex = this.surveyIndex;
+
+    survey.onCurrentPageChanged.add((survey, options) => {
       this.onCurrentPageChanged(
-        sender.custom_SurveyIndex,
-        sender.currentPageNo
+        survey.custom_surveyIndex,
+        survey.currentPageNo
       );
     });
 
-    survey.completeText = "Next";
+    survey.onValueChanged.add((survey, options) => {
+      if (survey.custom_surveyIndex == 0) {
+        // in the getting started form
+        this.onStartPageChanged(survey.data.forms);
+      } else {
+        // in a survey form
+        this.onSurveyDataChanged(survey.custom_surveyIndex, survey.data);
+      }
+    });
+
+    survey.onComplete.add((survey, options) => {
+      this.onSurveyComplete(survey.custom_surveyIndex, survey);
+    });
+
+    survey.completeText = "Next Form";
 
     return {
       survey: survey
     };
   },
-  created() {
-    console.log(
-      "surveyIndex: " +
-        this.surveyIndex +
-        ", pageIndex: " +
-        this.surveyJSONs[this.surveyIndex].pageIndex
-    );
-  },
+  created() {},
   methods: {
     onCurrentPageChanged: function(surveyIndex, pageIndex) {
       this.$store.dispatch("setSurveyPageIndex", {
-        surveyIndex: surveyIndex,
-        pageIndex: pageIndex
+        surveyIndex,
+        pageIndex
       });
+    },
+    onStartPageChanged: function(forms) {
+      if (forms == null) {
+        forms = [];
+      }
+
+      var i;
+      for (i = 1; i < this.$store.getters.surveyArray.length; i++) {
+        this.$store.dispatch("setSurveySelected", {
+          surveyIndex: i,
+          surveySelected: forms.includes(i)
+        });
+      }
+    },
+    onSurveyDataChanged(surveyIndex, surveyData) {
+      if (this.$store.getters.surveyArray[surveyIndex].completed === true) {
+        this.$store.dispatch("setSurveyIncomplete", surveyIndex);
+      } else {
+        this.$store.dispatch("setSurveyData", {
+          surveyIndex: surveyIndex,
+          surveyData: surveyData
+        });
+      }
+    },
+    onSurveyComplete(surveyIndex, survey) {
+      if (surveyIndex < this.$store.getters.surveyArray.length) {
+        // mark the survey as completed
+        this.$store.dispatch("setSurveyCompleted", surveyIndex);
+
+        // set the state to running, keep the data and go to the first page
+        // https://github.com/surveyjs/survey-library/issues/897
+        survey.clear(false, true);
+
+        // automatically set the surveyIndex to the next selected survey
+        var i;
+        for (
+          i = surveyIndex + 1;
+          i < this.$store.getters.surveyArray.length;
+          i++
+        ) {
+          var surveyElement = this.$store.getters.surveyArray[i];
+
+          if (surveyElement.selected) {
+            this.$store.dispatch("setSurveyIndex", i);
+            break;
+          }
+        }
+      } else {
+        // this is the last survey
+        // TODO: enable the print button
+      }
     }
   },
   props: {
     surveyIndex: Number,
-    surveyJSONs: Array,
     pageIndex: Number
   },
   watch: {

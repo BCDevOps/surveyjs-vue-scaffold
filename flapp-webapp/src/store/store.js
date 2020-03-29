@@ -6,32 +6,56 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   state: {
     surveyIndex: Number,
-    surveyJSONs: Array
+    surveyArray: Array
   },
   getters: {
     surveyIndex: state => state.surveyIndex,
-    surveyJSONs: state => state.surveyJSONs
+    surveyArray: state => state.surveyArray
   },
   mutations: {
+    setSurveyArray(state, surveyArray) {
+      state.surveyArray = surveyArray;
+    },
     setSurveyIndex(state, surveyIndex) {
       state.surveyIndex = surveyIndex;
     },
     setSurveyPageIndex(state, obj) {
-      state.surveyJSONs[obj.surveyIndex].pageIndex = obj.pageIndex;
+      state.surveyArray[obj.surveyIndex].pageIndex = obj.pageIndex;
     },
-    setSurveyJSONs(state, surveyJSONs) {
-      state.surveyJSONs = surveyJSONs;
+    setSurveySelected(state, obj) {
+      state.surveyArray[obj.surveyIndex].selected = obj.surveySelected;
+    },
+    setSurveyData(state, obj) {
+      state.surveyArray[obj.surveyIndex].data = obj.surveyData;
+    },
+    setSurveyCompleted(state, surveyIndex) {
+      state.surveyArray[surveyIndex].completed = true;
+    },
+    setSurveyIncomplete(state, surveyIndex) {
+      state.surveyArray[surveyIndex].completed = false;
     }
   },
   actions: {
+    setSurveyArray(context, surveyArray) {
+      context.commit("setSurveyArray", surveyArray);
+    },
     setSurveyIndex(context, surveyIndex) {
       context.commit("setSurveyIndex", surveyIndex);
     },
     setSurveyPageIndex(context, obj) {
       context.commit("setSurveyPageIndex", obj);
     },
-    setSurveyJSONs(context, surveyJSONs) {
-      context.commit("setSurveyJSONs", surveyJSONs);
+    setSurveySelected(context, obj) {
+      context.commit("setSurveySelected", obj);
+    },
+    setSurveyData(context, obj) {
+      context.commit("setSurveyData", obj);
+    },
+    setSurveyCompleted(context, surveyIndex) {
+      context.commit("setSurveyCompleted", surveyIndex);
+    },
+    setSurveyIncomplete(context, surveyIndex) {
+      context.commit("setSurveyIncomplete", surveyIndex);
     }
   }
 });

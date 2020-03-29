@@ -7,7 +7,8 @@
       </div>
       <a
         class="survey"
-        v-for="(survey, surveyIndex) in $store.getters.surveyJSONs"
+        v-for="(survey, surveyIndex) in $store.getters.surveyArray"
+        v-show="survey.selected"
         v-bind:key="surveyIndex"
         v-bind:id="getSurveyId(surveyIndex)"
         v-bind:index="surveyIndex"
@@ -21,9 +22,12 @@
             <i v-bind:class="['fa', survey.icon]"></i>
           </div>
           <div class="header-text">
-            <div class="text-step">STEP {{ surveyIndex + 1 }}</div>
+            <div class="text-step">
+              STEP {{ surveyIndex + 1 }}
+              <i v-show="survey.completed" class="fa fa-check" />
+            </div>
             <div class="text-title">
-              {{ survey.surveyJSON.title }}
+              {{ survey.json.title }}
             </div>
           </div>
         </div>
@@ -40,7 +44,7 @@
           <ul>
             <li
               tabindex="1"
-              v-for="(page, pageIndex) in survey.surveyJSON.pages"
+              v-for="(page, pageIndex) in survey.json.pages"
               v-bind:key="pageIndex"
               v-bind:id="getSurveyPageId(surveyIndex, pageIndex)"
               v-bind:index="pageIndex"
@@ -62,7 +66,7 @@
           <div class="header-icon"><i class="fa fa-print"></i></div>
           <div class="header-text">
             <div class="text-step">
-              STEP {{ $store.getters.surveyJSONs.length + 1 }}
+              STEP {{ $store.getters.surveyArray.length + 1 }}
             </div>
             <div class="text-title">
               Print Application Forms
@@ -112,7 +116,7 @@ export default {
     //TODO: This is where the step is selected
     onSelectPage: function(event) {
       var currSurveyIndex = this.$store.getters.surveyIndex;
-      var currPageIndex = this.$store.getters.surveyJSONs[currSurveyIndex]
+      var currPageIndex = this.$store.getters.surveyArray[currSurveyIndex]
         .pageIndex;
       var currPage = document.getElementById(
         this.getSurveyPageId(currSurveyIndex, currPageIndex)
@@ -286,8 +290,6 @@ $survey-header-hover-color: #efefef;
     padding: 0.2em;
     .text-step {
       font-weight: bold;
-    }
-    .text-title {
     }
   }
 }
