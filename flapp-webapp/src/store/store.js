@@ -6,11 +6,13 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   state: {
     surveyIndex: Number,
-    surveyArray: Array
+    surveyArray: Array,
+    allCompleted: false
   },
   getters: {
     surveyIndex: state => state.surveyIndex,
-    surveyArray: state => state.surveyArray
+    surveyArray: state => state.surveyArray,
+    allCompleted: state => state.allCompleted
   },
   mutations: {
     setSurveyArray(state, surveyArray) {
@@ -30,9 +32,21 @@ export const store = new Vuex.Store({
     },
     setSurveyCompleted(state, surveyIndex) {
       state.surveyArray[surveyIndex].completed = true;
+
+      // also calculate the 'all completed' flag
+      var allCompleted = true;
+      var i;
+      for (i = 1; i < state.surveyArray.length; i++) {
+        if (state.surveyArray[i].selected && !state.surveyArray[i].completed) {
+          allCompleted = false;
+          break;
+        }
+      }
+      state.allCompleted = allCompleted;
     },
     setSurveyIncomplete(state, surveyIndex) {
       state.surveyArray[surveyIndex].completed = false;
+      state.allCompleted = false;
     }
   },
   actions: {

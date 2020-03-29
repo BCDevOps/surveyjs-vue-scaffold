@@ -13,7 +13,9 @@
         v-bind:id="getSurveyId(surveyIndex)"
         v-bind:index="surveyIndex"
         v-bind:class="{
-          current: surveyIndex === $store.getters.surveyIndex
+          current:
+            surveyIndex === $store.getters.surveyIndex &&
+            !$store.getters.allCompleted
         }"
         v-on:click="onSelectSurvey($event)"
       >
@@ -61,7 +63,13 @@
         </div>
       </a>
       <div class="survey separate"></div>
-      <div class="survey">
+      <div
+        class="survey"
+        v-bind:class="{
+          disabled: !$store.getters.allCompleted,
+          current: $store.getters.allCompleted
+        }"
+      >
         <div class="survey-header">
           <div class="header-icon"><i class="fa fa-print"></i></div>
           <div class="header-text">
@@ -325,6 +333,16 @@ $survey-header-hover-color: #efefef;
   margin: 0;
   max-width: 100%;
   padding: 0;
+  &.disabled {
+    cursor: not-allowed;
+    .survey-header {
+      .header-icon,
+      .header-text {
+        border-color: $link-disabled-color;
+        color: $link-disabled-color;
+      }
+    }
+  }
   &.current {
     .survey-header {
       background: $gov-gold;
