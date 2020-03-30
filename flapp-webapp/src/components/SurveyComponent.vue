@@ -1,8 +1,43 @@
 <template>
-  <div class="fill-height-lg survey-container contentcontainer codecontainer">
-    <b-container class="fill-body">
-      <survey v-bind:survey="survey"></survey>
-      <!--div id="surveyResult"></div-->
+  <div
+    class="fill-height-lg survey-container contentcontainer codecontainer survey-primary"
+  >
+    <b-container class="fill-body sv_main row">
+      <div
+        id="surveyContainer"
+        class="survey-container contentcontainer codecontainer"
+      >
+        <survey v-bind:survey="survey"></survey>
+
+        <br />
+        <div class="survey-nav">
+          <div
+            class="survey-nav-left"
+            v-if="!isFirstPage()"
+            v-on:click="prevPage()"
+          >
+            <button class="btn btn-primary btn-lg">
+              <span class="fa fa-arrow-circle-left btn-icon-left"></span> Back
+            </button>
+          </div>
+          <div class="survey-nav-right">
+            <button
+              class="btn btn-primary btn-lg"
+              v-if="!isLastSurveyAndPage()"
+              v-on:click="nextPage()"
+            >
+              Next <span class="fa fa-arrow-circle-right btn-icon-right"></span>
+            </button>
+            <button
+              class="btn btn-success btn-lg"
+              v-if="isLastSurveyAndPage()"
+              v-on:click="nextPage()"
+            >
+              <span class="fa fa-check-circle btn-icon-left"></span> Complete
+            </button>
+          </div>
+        </div>
+      </div>
     </b-container>
   </div>
 </template>
@@ -11,8 +46,30 @@
 import * as SurveyVue from "survey-vue";
 import { addQuestionTypes } from "./question-types.ts";
 
-SurveyVue.StylesManager.applyTheme("bcgov");
 addQuestionTypes(SurveyVue);
+
+// SurveyVue.defaultBootstrapCss.page.root = "sv_page";
+// SurveyVue.defaultBootstrapCss.pageDescription = "sv_page_description";
+// SurveyVue.defaultBootstrapCss.page.description = "sv_page_description";
+// SurveyVue.defaultBootstrapCss.pageTitle = "sv_page_title";
+// SurveyVue.defaultBootstrapCss.page.title = "sv_page_title";
+// SurveyVue.defaultBootstrapCss.navigationButton = "btn btn-primary";
+// SurveyVue.defaultBootstrapCss.question.title = "sv_q_title";
+// SurveyVue.defaultBootstrapCss.question.description = "sv_q_description";
+// SurveyVue.defaultBootstrapCss.panel.description = "sv_p_description";
+// SurveyVue.defaultBootstrapCss.matrixdynamic.button = "btn btn-primary";
+// SurveyVue.defaultBootstrapCss.paneldynamic.button = "btn btn-primary";
+// SurveyVue.defaultBootstrapCss.paneldynamic.root = "sv_p_dynamic";
+// SurveyVue.defaultBootstrapCss.checkbox.item = "sv-checkbox";
+// SurveyVue.defaultBootstrapCss.checkbox.controlLabel = "sv-checkbox-label";
+// SurveyVue.defaultBootstrapCss.checkbox.materialDecorator = "";
+// SurveyVue.defaultBootstrapCss.radiogroup.item = "sv-radio";
+// SurveyVue.defaultBootstrapCss.radiogroup.controlLabel = "sv-checkbox-label";
+// SurveyVue.defaultBootstrapCss.radiogroup.materialDecorator = "";
+
+SurveyVue.StylesManager.applyTheme("bootstrap");
+
+//SurveyVue.StylesManager.applyTheme("bcgov");
 
 export default {
   name: "SurveyComponent",
@@ -20,6 +77,10 @@ export default {
     var survey = new SurveyVue.Model(
       this.$store.getters.surveyArray[this.surveyIndex].json
     );
+
+    survey.commentPrefix = "Comment";
+    survey.showQuestionNumbers = "off";
+    survey.showNavigationButtons = false;
 
     survey.data = this.$store.getters.surveyArray[this.surveyIndex].data;
 
@@ -55,6 +116,43 @@ export default {
   },
   created() {},
   methods: {
+    isFirstPage: function() {
+      return this.survey.isFirstPage;
+    },
+    isLastPage: function() {
+      return this.survey.isLastPage;
+    },
+    isLastSurveyAndPage: function() {
+      if (!this.isLastPage()) {
+        return false;
+      } else {
+        var surveyArray = this.$store.getters.surveyArray;
+        var lastSurveyIndex = 0;
+
+        var i;
+        for (i = surveyArray.length - 1; i >= 0; i--) {
+          if (surveyArray[i].selected) {
+            // found the last selected survey
+            lastSurveyIndex = i;
+            break;
+          }
+        }
+
+        return this.surveyIndex == lastSurveyIndex;
+      }
+    },
+    prevPage: function() {
+      if (!this.isFirstPage()) {
+        this.survey.prevPage();
+      }
+    },
+    nextPage: function() {
+      if (this.isLastPage()) {
+        this.survey.completeLastPage();
+      } else {
+        this.survey.nextPage();
+      }
+    },
     onCurrentPageChanged: function(surveyIndex, pageIndex) {
       this.$store.dispatch("setSurveyPageIndex", {
         surveyIndex,
@@ -128,5 +226,46 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import "../styles/common";
-@import "../styles/survey";
+@import "../styles/styles";
+
+// utility navigation
+.survey-cache-info {
+  padding: 0 1.5em;
+  position: absolute;
+  right: 0;
+}
+// util nav items, profile, log-out button
+button.util-nav,
+a.util-nav {
+  background: none;
+  border: none;
+  padding-top: 0.65em;
+  font-size: 16px;
+  /*&:hover {
+    color: $gov-mid-blue;
+  }*/
+}
+button.util-nav {
+  &:before {
+    content: " | ";
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
+}
+a.util-nav {
+  text-decoration: none;
+}
+
+.cache-time {
+  padding-right: 1em;
+  color: $gov-navy-blue;
+}
+
+.survey-nav-left,
+.survey-nav-right {
+  display: inline-block;
+}
+.survey-nav-left {
+  margin-right: 1em;
+}
 </style>

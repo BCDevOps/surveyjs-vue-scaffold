@@ -38,7 +38,8 @@
           v-bind:id="getSurveyGroupId(surveyIndex)"
           v-bind:index="surveyIndex"
           v-bind:style="
-            surveyIndex === $store.getters.surveyIndex
+            surveyIndex === $store.getters.surveyIndex &&
+            !$store.getters.allCompleted
               ? 'display: block;'
               : 'display: none;'
           "
@@ -120,6 +121,9 @@ export default {
       }
 
       this.$store.dispatch("setSurveyIndex", nextIndex);
+
+      // hack
+      this.$store.dispatch("setSurveyIncomplete", nextIndex);
     },
     //TODO: This is where the step is selected
     onSelectPage: function(event) {
@@ -200,7 +204,6 @@ export default {
 div.content {
   margin-left: 200px;
   padding: 1px 16px;
-  height: 1000px;
 }
 
 /* On screens that are less than 700px wide, make the sidebar into a topbar */
@@ -243,6 +246,7 @@ div.content {
   position: absolute;
   top: 0;
   width: $sidebar-width-md;
+  height: 100%;
 }
 
 // sidebar title

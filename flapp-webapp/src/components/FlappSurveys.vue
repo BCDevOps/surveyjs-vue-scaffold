@@ -3,8 +3,8 @@
     <NavigationTopbar />
     <main class="app-content fill-body">
       <NavigationSidebar />
-      <SurveySelector />
-
+      <SurveySelector v-show="!$store.getters.allCompleted" />
+      <Print v-show="$store.getters.allCompleted" />
       <!--SurveyCreatorComponent /-->
     </main>
     <NavigationFooter id="footer" />
@@ -16,11 +16,13 @@ import NavigationTopbar from "./NavigationTopbar.vue";
 import NavigationSidebar from "./NavigationSidebar.vue";
 import SurveySelector from "./SurveySelector.vue";
 //import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
+import Print from "./Print.vue";
 import NavigationFooter from "./NavigationFooter.vue";
 
-//import startJson from "../assets/survey-start-your-application.json";
 import fpoJson from "../assets/survey-fpo.json";
+//import fpoJson from "../assets/survey-primary-orig.json";
 import flmJson from "../assets/survey-flm.json";
+import parentingJson from "../assets/survey-parenting.json";
 
 export default {
   name: "FlappSurveys",
@@ -28,7 +30,8 @@ export default {
     NavigationTopbar,
     NavigationFooter,
     NavigationSidebar,
-    SurveySelector
+    SurveySelector,
+    Print
   },
   computed: {},
   data() {
@@ -37,7 +40,8 @@ export default {
   beforeCreate() {
     var startChoiceArray = [
       { value: 1, text: "Step 2 : " + fpoJson.title },
-      { value: 2, text: "Step 3 : " + flmJson.title }
+      { value: 2, text: "Step 3 : " + flmJson.title },
+      { value: 3, text: "Step 4 : " + parentingJson.title }
     ];
 
     var formIndexArray = [];
@@ -87,6 +91,14 @@ export default {
         json: flmJson,
         data: {},
         icon: "fa-anchor",
+        pageIndex: 0,
+        selected: true,
+        completed: false
+      },
+      {
+        json: parentingJson,
+        data: {},
+        icon: "fa-child",
         pageIndex: 0,
         selected: true,
         completed: false
