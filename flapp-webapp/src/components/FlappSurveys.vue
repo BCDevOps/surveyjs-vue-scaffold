@@ -1,20 +1,10 @@
 <template>
-  <div class=" fill-body" id="flappsurveys">
+  <div class="fill-body" id="flappsurveys">
     <NavigationTopbar />
     <main class="app-content fill-body">
-      <NavigationSidebar
-        v-bind:selectedSurveyIndex="v_selectedSurveyIndex"
-        v-bind:selectedPageIndex="v_selectedPageIndex"
-        v-bind:surveyJSONs="v_surveyJSONs"
-        v-on:updated-survey-index="onUpdateSurveyIndex"
-        v-on:updated-page-index="onUpdatePageIndex"
-      />
-      <SurveySelector
-        v-bind:selectedSurveyIndex="v_selectedSurveyIndex"
-        v-on:updated-survey-details="onUpdateSurveyDetails"
-        v-on:created-surveyJSONs="onCreatedSurveyJSONs"
-      />
-
+      <NavigationSidebar />
+      <SurveySelector v-show="!$store.getters.allCompleted" />
+      <Print v-show="$store.getters.allCompleted" />
       <!--SurveyCreatorComponent /-->
     </main>
     <NavigationFooter id="footer" />
@@ -26,7 +16,13 @@ import NavigationTopbar from "./NavigationTopbar.vue";
 import NavigationSidebar from "./NavigationSidebar.vue";
 import SurveySelector from "./SurveySelector.vue";
 //import SurveyCreatorComponent from "./components/SurveyCreatorComponent.vue";
+import Print from "./Print.vue";
 import NavigationFooter from "./NavigationFooter.vue";
+
+import fpoJson from "../assets/survey-fpo.json";
+//import fpoJson from "../assets/survey-primary-orig.json";
+import flmJson from "../assets/survey-flm.json";
+import parentingJson from "../assets/survey-parenting.json";
 
 export default {
   name: "FlappSurveys",
@@ -34,85 +30,85 @@ export default {
     NavigationTopbar,
     NavigationFooter,
     NavigationSidebar,
-    SurveySelector
-    //ApplicantExperience
-
-    //SurveyCreatorComponent
+    SurveySelector,
+    Print
   },
-  computed: {
-    selectedSurveyIndex: {
-      get: function() {
-        return this.v_selectedSurveyIndex;
-      },
-      set: function(newValue) {
-        this.v_selectedSurveyIndex = newValue;
-      }
-    },
-    selectedPageIndex: {
-      get: function() {
-        return this.v_selectedPageIndex;
-      },
-      set: function(newValue) {
-        this.v_selectedPageIndex = newValue;
-      }
-    },
-    surveyDetails: {
-      get: function() {
-        return this.currentSurveyDetails;
-      },
-      set: function(newValue) {
-        this.currentSurveyDetails = newValue;
-      }
-    },
-    surveyJSONs: {
-      get: function() {
-        return this.v_surveyJSONs;
-      },
-      set: function(newValue) {
-        this.v_surveyJSONs = newValue;
-      }
-    }
-  },
+  computed: {},
   data() {
-    return {
-      v_selectedSurveyIndex: 2,
-      v_selectedPageIndex: 0,
-      v_surveyJSONs: []
-    };
+    return {};
   },
-  methods: {
-    onUpdatePageIndex(value) {
-      console.log(
-        "this.selectedPageIndexhis.page was '" + this.selectedPageIndex + "'"
-      );
-      this.selectedPageIndex = value;
-      console.log(
-        "this.selectedPageIndex is now '" + this.selectedPageIndex + "'"
-      );
-      return value;
-    },
-    onUpdateSurveyIndex(value) {
-      console.log(
-        "this.selectedSurveyIndex was '" + this.selectedSurveyIndex + "'"
-      );
-      this.selectedSurveyIndex = value;
-      console.log(
-        "this.selectedSurveyIndex is now '" + this.selectedSurveyIndex + "'"
-      );
-      return value;
-    },
-    onUpdateSurveyDetails: function(value) {
-      console.log(
-        "In FlappSurveys .  Survey = '" + JSON.stringify(value) + "'"
-      );
+  beforeCreate() {
+    var startChoiceArray = [
+      { value: 1, text: "Step 2 : " + fpoJson.title },
+      { value: 2, text: "Step 3 : " + flmJson.title },
+      { value: 3, text: "Step 4 : " + parentingJson.title }
+    ];
 
-      this.surveyDetails = value;
-      return value;
-    },
-    onCreatedSurveyJSONs: function(value) {
-      this.surveyJSONs = value;
-    }
-  }
+    var formIndexArray = [];
+
+    var startJson = {
+      pages: [
+        {
+          name: "page1",
+          elements: [
+            {
+              type: "checkbox",
+              name: "forms",
+              title: "Which forms apply to you",
+              choices: startChoiceArray
+            }
+          ],
+          title: "Select your forms"
+        }
+      ],
+      title: "Start Your Application"
+    };
+
+    startChoiceArray.forEach(element => {
+      formIndexArray.push(element.value);
+    });
+
+    var startJsonData = { forms: formIndexArray };
+
+    var surveyArray = [
+      {
+        json: startJson,
+        data: startJsonData,
+        icon: "fa-headphones",
+        pageIndex: 0,
+        selected: true,
+        completed: false
+      },
+      {
+        json: fpoJson,
+        data: {},
+        icon: "fa-users",
+        pageIndex: 0,
+        selected: true,
+        completed: false
+      },
+      {
+        json: flmJson,
+        data: {},
+        icon: "fa-anchor",
+        pageIndex: 0,
+        selected: true,
+        completed: false
+      },
+      {
+        json: parentingJson,
+        data: {},
+        icon: "fa-child",
+        pageIndex: 0,
+        selected: true,
+        completed: false
+      }
+    ];
+
+    this.$store.dispatch("setSurveyArray", surveyArray);
+    this.$store.dispatch("setSurveyIndex", 0);
+  },
+  methods: {}
 };
 </script>
 
