@@ -7,7 +7,7 @@
         <a class="navbar-brand" href="https://www2.gov.bc.ca">
           <img
             class="img-fluid d-none d-md-block"
-            src="../assets/images/bcid-logo-rev-en.svg"
+            src="../../public/images/bcid-logo-rev-en.svg"
             width="177"
             height="44"
             alt="B.C. Government Logo"
@@ -15,7 +15,7 @@
 
           <img
             class="img-fluid d-md-none"
-            src="../assets/images/bcid-symbol-rev.svg"
+            src="../../public/images/bcid-symbol-rev.svg"
             width="63"
             height="44"
             alt="B.C. Government Logo"
