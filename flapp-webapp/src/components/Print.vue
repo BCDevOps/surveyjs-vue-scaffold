@@ -32,13 +32,3 @@ export default {
   computed: {}
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-@import "../styles/common";
-@import "../styles/survey";
-
-.fill-body {
-  height: 100%;
-}
-</style>
