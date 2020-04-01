@@ -5,59 +5,84 @@
       <div class="sidebar-title">
         <h3>Application Steps</h3>
       </div>
-      <ul
-        class="links"
-        v-if="
-          typeof surveyJSONs !== 'undefined' &&
-            surveyJSONs !== null &&
-            surveyJSONs.length > 0
-        "
+      <a
+        class="survey"
+        v-for="(survey, surveyIndex) in $store.getters.surveyArray"
+        v-show="survey.selected"
+        v-bind:key="surveyIndex"
+        v-bind:id="getSurveyId(surveyIndex)"
+        v-bind:index="surveyIndex"
+        v-bind:class="{
+          current:
+            surveyIndex === $store.getters.surveyIndex &&
+            !$store.getters.allCompleted
+        }"
+        v-on:click="onSelectSurvey($event)"
       >
-        <li
-          tabindex="0"
-          v-for="(survey, surveyIndex) in surveyJSONs"
-          v-bind:key="surveyIndex"
-          v-bind:id="getSurveyId(surveyIndex)"
+        <div class="survey-header">
+          <div class="header-icon">
+            <i v-bind:class="['fa', survey.icon]"></i>
+          </div>
+          <div class="header-text">
+            <div class="text-step">
+              STEP {{ surveyIndex + 1 }}
+              <i v-show="survey.completed" class="fa fa-check" />
+            </div>
+            <div class="text-title">
+              {{ survey.json.title }}
+            </div>
+          </div>
+        </div>
+        <div
+          class="survey-pages"
+          v-bind:id="getSurveyGroupId(surveyIndex)"
           v-bind:index="surveyIndex"
-          v-bind:class="{ current: surveyIndex === selectedSurveyIndex }"
-          v-on:click="onSelectSurvey($event)"
+          v-bind:style="
+            surveyIndex === $store.getters.surveyIndex &&
+            !$store.getters.allCompleted
+              ? 'display: block;'
+              : 'display: none;'
+          "
         >
-          <div class="link-icon">{{ surveyIndex + 1 }}</div>
-          <div class="link-label">
-            {{ surveyJSONs[surveyIndex].surveyJSON.title }}
+          <ul>
+            <li
+              tabindex="1"
+              v-for="(page, pageIndex) in survey.json.pages"
+              v-bind:key="pageIndex"
+              v-bind:id="getSurveyPageId(surveyIndex, pageIndex)"
+              v-bind:index="pageIndex"
+              v-bind:class="{
+                current: pageIndex === survey.pageIndex
+              }"
+              v-on:click="onSelectPage($event)"
+            >
+              <div class="survey-pages">
+                {{ page.title }}
+              </div>
+            </li>
+          </ul>
+        </div>
+      </a>
+      <div class="survey separate"></div>
+      <div
+        class="survey"
+        v-bind:class="{
+          disabled: !$store.getters.allCompleted,
+          current: $store.getters.allCompleted
+        }"
+      >
+        <div class="survey-header">
+          <div class="header-icon"><i class="fa fa-print"></i></div>
+          <div class="header-text">
+            <div class="text-step">
+              STEP {{ $store.getters.surveyArray.length + 1 }}
+            </div>
+            <div class="text-title">
+              Print Application Forms
+            </div>
           </div>
-          <div
-            v-bind:id="getSurveyGroupId(surveyIndex)"
-            v-bind:index="surveyIndex"
-            v-bind:style="
-              surveyIndex === selectedSurveyIndex
-                ? 'display: block;'
-                : 'display: none;'
-            "
-          >
-            <ul class="links">
-              <li
-                tabindex="1"
-                v-for="(page, pageIndex) in surveyJSONs[surveyIndex].surveyJSON
-                  .pages"
-                v-bind:key="pageIndex"
-                v-bind:id="getSurveyPageId(surveyIndex, pageIndex)"
-                v-bind:index="pageIndex"
-              >
-                <div class="link-label" v-on:click="onSelectPage($event)">
-                  {{ page.title }}
-                </div>
-              </li>
-            </ul>
-          </div>
-        </li>
-
-        <li class="separate" />
-        <li tabindex="-1" id="print" class="disabled">
-          <div class="link-icon">{{ surveyJSONs.length + 1 }}</div>
-          <div class="link-label">Print Application Forms</div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -72,7 +97,7 @@ export default {
   },
   methods: {
     onSelectSurvey: function(event) {
-      var currIndex = this.selectedSurveyIndex;
+      var currIndex = this.$store.getters.surveyIndex;
       var curr = document.getElementById(this.getSurveyId(currIndex));
       var currChildGroup = document.getElementById(
         this.getSurveyGroupId(currIndex)
@@ -95,29 +120,37 @@ export default {
         currChildGroup.style.display = "none";
       }
 
-      this.$emit("updated-survey-index", parseInt(nextIndex));
+      this.$store.dispatch("setSurveyIndex", nextIndex);
+
+      // hack
+      this.$store.dispatch("setSurveyIncomplete", nextIndex);
     },
     //TODO: This is where the step is selected
     onSelectPage: function(event) {
-      // var step1 = document.getElementById("fpo-group");
-      //console.log("page11 is " + page1);
-      console.log("this.selectedPage is " + this.selectedPage);
-      var prevPage = document.getElementById(this.selectedPage);
-      console.log("prev page is " + prevPage);
-      var currPage = event.currentTarget;
-      console.log("curr page is " + currPage);
+      var currSurveyIndex = this.$store.getters.surveyIndex;
+      var currPageIndex = this.$store.getters.surveyArray[currSurveyIndex]
+        .pageIndex;
+      var currPage = document.getElementById(
+        this.getSurveyPageId(currSurveyIndex, currPageIndex)
+      );
 
-      if (prevPage == currPage) {
+      var nextPage = event.currentTarget;
+      var nextPageIndex = parseInt(nextPage.getAttribute("index"));
+
+      if (currPage == nextPage) {
         // same choice; do nothing
       } else {
-        currPage.classList.add("current");
+        nextPage.classList.add("current");
 
-        if (prevPage !== null) {
-          prevPage.classList.remove("current");
+        if (currPage !== null) {
+          currPage.classList.remove("current");
         }
       }
 
-      this.$emit("updated-page-index", event.currentTarget.pageIndex);
+      this.$store.dispatch("setSurveyPageIndex", {
+        surveyIndex: currSurveyIndex,
+        pageIndex: nextPageIndex
+      });
     },
     getSurveyId: function(surveyIndex) {
       return "survey-" + surveyIndex;
@@ -129,11 +162,7 @@ export default {
       return this.getSurveyId(surveyIndex) + "-page-" + pageIndex;
     }
   },
-  props: {
-    selectedSurveyIndex: Number,
-    selectedPageIndex: Number,
-    surveyJSONs: Array
-  }
+  props: {}
 };
 </script>
 
@@ -175,7 +204,6 @@ export default {
 div.content {
   margin-left: 200px;
   padding: 1px 16px;
-  height: 1000px;
 }
 
 /* On screens that are less than 700px wide, make the sidebar into a topbar */
@@ -218,6 +246,7 @@ div.content {
   position: absolute;
   top: 0;
   width: $sidebar-width-md;
+  height: 100%;
 }
 
 // sidebar title
@@ -234,104 +263,123 @@ $link-active-color: #349;
 $link-current-color: $gov-white;
 $link-hover-color: #57d;
 $link-disabled-color: #777;
+$survey-header-current-color: #fcba19;
+$survey-header-hover-color: #efefef;
 
-.links {
-  display: block;
+.survey-header {
+  flex-flow: row nowrap;
+  background: #eee;
+  display: flex;
   list-style-type: none;
   margin: 0;
-  max-width: 100%;
-  padding: 0;
-  li {
-    cursor: pointer;
+  width: 100%;
+  padding: 1em 1em;
+  .header-icon {
+    border-color: $text-color;
+    color: $text-color;
+    font-weight: bold;
+    position: relative;
+    top: 0.15em;
+    border: 2px solid $text-color;
+    border-radius: 50%;
+    font-size: 20px;
+    flex: none;
+    height: 38px;
+    line-height: 34px;
+    width: 38px;
+    text-align: center;
+    transition: border-color color 0.1s linear;
+    font-variant-numeric: tabular-nums;
+
+    i.fa {
+      line-height: 23px;
+      padding-left: 2px;
+    }
+  }
+  .header-text {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column nowrap;
+    padding: 0.2em;
+    .text-step {
+      font-weight: bold;
+    }
+  }
+}
+
+.survey-pages {
+  margin: 0;
+  width: 100%;
+  ul {
     list-style-type: none;
-    margin: 0;
-    padding: 0.5rem 1em;
-    &.disabled {
-      cursor: not-allowed;
-    }
-    &:not(.current):not(:active):not(:focus):not(.disabled):hover {
-      .link-icon {
-        border-color: $link-hover-color;
-        color: $link-hover-color;
+    padding: 0;
+    border-left: solid $gov-gold;
+    margin-left: 2em;
+    margin-top: 1em;
+    margin-right: 2em;
+    li {
+      margin-left: 1em;
+
+      &.current {
+        color: $gov-gold;
+        outline: none;
       }
-      .link-label {
-        color: $link-hover-color;
-      }
-    }
-    &:active,
-    &:focus {
-      .link-icon {
-        border-color: $link-active-color;
-        color: $link-active-color;
-        font-weight: bold;
-      }
-      .link-label {
-        color: $link-active-color;
-      }
-    }
-    &.current {
-      background: $gov-gold;
-      .link-icon {
-        border-color: $link-current-color;
-        color: $link-current-color;
-        font-weight: bold;
-      }
-      .link-label {
-        color: $link-current-color;
-      }
-    }
-    &.disabled {
-      .link-icon {
-        border-color: $link-disabled-color;
-        color: $link-disabled-color;
-      }
-      .link-label {
-        color: $link-disabled-color;
-      }
-    }
-    &.separate {
-      margin-top: 1em;
-      &::before {
-        display: block;
-        content: " ";
-        margin: 0 1.5em;
-        position: relative;
-        top: -0.75em;
-        height: 1px;
-        background: #25b;
-        width: 100%;
+      &:active {
+        outline: none;
       }
     }
   }
 }
 
-.link-icon {
-  position: relative;
-  top: 0.15em;
-  border: 2px solid $text-color-link;
-  border-radius: 50%;
-  color: $text-color-link;
-  font-size: 20px;
-  flex: none;
-  height: 28px;
-  line-height: 24px;
-  width: 28px;
-  text-align: center;
-  transition: border-color color 0.1s linear;
-  font-variant-numeric: tabular-nums;
-}
-.link-icon.fa {
-  line-height: 23px;
-  padding-left: 2px;
-}
-
-.link-label {
-  font-size: 1.1em;
-  color: $text-color-link;
-  padding-left: 10px;
-  padding-top: 5px;
-  transition: color 0.1s linear;
+.survey {
+  cursor: pointer;
+  display: block;
+  list-style-type: none;
+  margin: 0;
+  max-width: 100%;
+  padding: 0;
+  &.disabled {
+    cursor: not-allowed;
+    .survey-header {
+      .header-icon,
+      .header-text {
+        border-color: $link-disabled-color;
+        color: $link-disabled-color;
+      }
+    }
+  }
+  &.current {
+    .survey-header {
+      background: $gov-gold;
+      display: flex;
+      list-style-type: none;
+      margin: 0;
+      width: 100%;
+      padding: 1em 1em;
+      .header-icon {
+        border-color: $gov-white;
+        color: $gov-white;
+      }
+      .header-text {
+        color: $gov-white;
+        display: flex;
+        flex-flow: column nowrap;
+        color: $link-current-color;
+      }
+    }
+  }
+  &.separate {
+    margin-top: 2em;
+    margin-right: 3em;
+    &::before {
+      display: block;
+      content: " ";
+      margin: 0 1.5em;
+      position: relative;
+      top: -0.75em;
+      height: 1px;
+      background: #25b;
+      width: 100%;
+    }
+  }
 }
 </style>
