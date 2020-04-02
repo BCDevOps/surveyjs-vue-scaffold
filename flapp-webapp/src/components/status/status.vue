@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  name: "status",
+  name: "Status",
   data() {
     return {
         inProgressApplications: [],

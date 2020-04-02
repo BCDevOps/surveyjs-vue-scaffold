@@ -40,7 +40,7 @@
 
 <script>
 export default {
-  name: "login",
+  name: "Login",
   props: ['userType'],
   data() {
     return {};

@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "serviceLocator",
+  name: "ServiceLocator",
   data() {
     return {
       form: {
