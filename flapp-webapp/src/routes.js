@@ -1,16 +1,15 @@
 import LandingPage from './components/landingNavigation/LandingPage.vue';
-import login from './components/landingNavigation/login.vue';
-import serviceLocator from './components/landingNavigation/serviceLocator.vue';
+import Login from './components/landingNavigation/Login.vue';
+import ServiceLocator from './components/landingNavigation/ServiceLocator.vue';
 import FlappSurveys from './components/FlappSurveys.vue';
-import status from './components/status/status.vue'
+import Status from './components/status/Status.vue'
 
 const routes = [
-    { path: "/", redirect: {name: "LandingPage"}},
-    { path: '/', name: 'LandingPage', component: LandingPage },
-    { path: '/login', name: 'login', component: login, props: true} ,
-    { path: '/serviceLocator', name:'serviceLocator', component:serviceLocator },
-     { path: '/getStarted', name: 'FlappSurveys', component: FlappSurveys },
-    { path: '/status', name: 'status', component: status }
+    { path: '/', component: LandingPage },
+    { path: '/login', name: 'login', component: Login, props: true} ,
+    { path: '/serviceLocator', name:'serviceLocator', component:ServiceLocator },
+    { path: '/getStarted', name: 'FlappSurveys', component: FlappSurveys },
+    { path: '/status', name: 'status', component: Status }
 ];
 
 export default routes;
