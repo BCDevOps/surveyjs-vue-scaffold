@@ -51,7 +51,7 @@
          
           <div class="row custom-align-login-button">
             <div class="col-md-12">
-              <a class="btn btn-default btn-md login-button" @click="navigate()">
+              <a class="btn btn-default btn-md login-button" @click="navigate('returning')">
                 <strong>Returning User?</strong>
                 <br/>Log in with BCeID
                 </a>
@@ -65,7 +65,6 @@
 </template>
 
 <script>
-//import x from ""
 export default {
   name: "LandingPage",
   data() {
@@ -73,11 +72,8 @@ export default {
   },
   methods: {
     navigate(userType) {
-      if(userType) {
-        this.$router.push({name: "login", params: {userType:'new'}})
-      } else {
-        this.$router.push({name: "login", params: {userType:'returning'}})
-      }
+      this.$store.dispatch('setUserType', userType)
+      this.$router.push({name: "login"})
     }
   }
 };

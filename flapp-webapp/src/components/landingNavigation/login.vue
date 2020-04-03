@@ -41,19 +41,18 @@
 <script>
 export default {
   name: "Login",
-  props: ['userType'],
   data() {
     return {};
   },
   methods: {
     navigate() {
-      if(this.userType === 'new') {
+      if(this.$store.getters.userType === 'new') {
         this.$router.push({name: "serviceLocator"})
-      } else if(this.userType === 'returning') {
+      } else if(this.$store.getters.userType === 'returning') {
         this.$router.push({name: "status"})
       }
     }
-  }
+  },
 };
 </script>
 
